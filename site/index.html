@@ -28,7 +28,7 @@
 :root{
   --bg:#F5F7F4; --surface:#FFFFFF; --line:#D6DDD3;
   --fg:#17201A; --muted:#5B675F; --accent:#227A37; --accent-ink:#FFFFFF;
-  --t-new:#1C5FB0; --t-buff:#227A37; --t-nerf:#B4233C; --t-bal:#8F5C00; --t-event:#A8226A; --t-done:#6B4BB8; --t-known:#A84F12; --t-news:#0E7268;
+  --t-buff:#227A37; --t-nerf:#B4233C; --t-bal:#8F5C00; --t-event:#A8226A; --t-done:#6B4BB8; --t-known:#A84F12; --t-news:#0E7268;
   --font-body:"IBM Plex Sans Thai","Leelawadee UI",Thonburi,system-ui,sans-serif;
   --font-mono:"IBM Plex Mono","IBM Plex Sans Thai",ui-monospace,Menlo,Consolas,monospace;
   color-scheme:light;
@@ -37,14 +37,14 @@
   :root:not([data-theme="light"]){
     --bg:#101411; --surface:#161B17; --line:#2A342D;
     --fg:#E1E8E2; --muted:#909D95; --accent:#5CC872; --accent-ink:#0A1A0E;
-    --t-new:#74AAF2; --t-buff:#5CC872; --t-nerf:#FF7D8F; --t-bal:#E5B04A; --t-event:#F07DB5; --t-done:#B39DFF; --t-known:#F29A5F; --t-news:#4FD1C5;
+    --t-buff:#5CC872; --t-nerf:#FF7D8F; --t-bal:#E5B04A; --t-event:#F07DB5; --t-done:#B39DFF; --t-known:#F29A5F; --t-news:#4FD1C5;
     color-scheme:dark;
   }
 }
 :root[data-theme="dark"]{
   --bg:#101411; --surface:#161B17; --line:#2A342D;
   --fg:#E1E8E2; --muted:#909D95; --accent:#5CC872; --accent-ink:#0A1A0E;
-  --t-new:#74AAF2; --t-buff:#5CC872; --t-nerf:#FF7D8F; --t-bal:#E5B04A; --t-event:#F07DB5; --t-done:#B39DFF; --t-known:#F29A5F; --t-news:#4FD1C5;
+  --t-buff:#5CC872; --t-nerf:#FF7D8F; --t-bal:#E5B04A; --t-event:#F07DB5; --t-done:#B39DFF; --t-known:#F29A5F; --t-news:#4FD1C5;
   color-scheme:dark;
 }
 
@@ -68,7 +68,6 @@ a{color:inherit}
 :focus-visible{outline:2px solid var(--accent); outline-offset:2px}
 .tnum{font-variant-numeric:tabular-nums}
 
-.tag-new{--tag:var(--t-new)}
 .tag-buff{--tag:var(--t-buff)}
 .tag-nerf{--tag:var(--t-nerf)}
 .tag-rebalance{--tag:var(--t-bal)}
@@ -155,9 +154,9 @@ html[lang="th"] .cl-top h1{letter-spacing:0}
 (() => {
   const root = document.documentElement;
   const app = document.getElementById("app");
-  const TAG_ORDER = ["news", "new", "buff", "nerf", "rebalance", "event", "concluded", "known"];
+  const TAG_ORDER = ["news", "buff", "nerf", "rebalance", "event", "concluded", "known"];
   const TAB_TAGS = {
-    changelog: ["new", "buff", "nerf", "rebalance", "event", "concluded", "known"],
+    changelog: ["buff", "nerf", "rebalance", "event", "concluded", "known"],
     ugc: ["news", "event"]
   };
   const DAYS_PER_PAGE = 10;
@@ -222,8 +221,8 @@ html[lang="th"] .cl-top h1{letter-spacing:0}
   };
 
   const TAG = {
-    en: { new: "NEW", buff: "BUFF", nerf: "NERF", rebalance: "REBALANCE", event: "EVENT", concluded: "EVENT CONCLUDED", known: "KNOWN ISSUE", news: "NEWS" },
-    th: { new: "ใหม่", buff: "บัฟ", nerf: "เนิร์ฟ", rebalance: "ปรับบาลานซ์", event: "อีเวนต์", concluded: "ปิดอีเวนต์", known: "ปัญหาที่ทราบ", news: "ข่าว" }
+    en: { buff: "BUFF", nerf: "NERF", rebalance: "REBALANCE", event: "EVENT", concluded: "EVENT CONCLUDED", known: "KNOWN ISSUE", news: "NEWS" },
+    th: { buff: "บัฟ", nerf: "เนิร์ฟ", rebalance: "ปรับบาลานซ์", event: "อีเวนต์", concluded: "ปิดอีเวนต์", known: "ปัญหาที่ทราบ", news: "ข่าว" }
   };
 
   const ICON = {

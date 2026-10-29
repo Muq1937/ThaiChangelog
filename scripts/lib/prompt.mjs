@@ -60,9 +60,8 @@ The site has two tabs. Put each pick in one:
 In every note, and especially "ugc" ones, never mock the person, and never name a private individual. Describe them by role or place instead (a 7-Eleven clerk, a grandmother in Nan).
 
 TAGS
-- new: something new appears (an animal birth, a new attraction, a discovery)
-- buff: something got better (a tariff or fee cut, a longer visa-free stay, a new service)
-- nerf: something got a little worse (a price or tax rise, a perk removed, a stricter rule). Only minor setbacks, never harm to people.
+- buff: something got better or was added (a tariff or fee cut, a longer visa-free stay, a new service or route opening)
+- nerf: something got a little worse or was taken away (a price or tax rise, a perk removed, a new or stricter rule). Only minor setbacks, never harm to people.
 - rebalance: a change with trade-offs, or an adjustment that is neither clearly better nor worse
 - event: an event is announced, coming up or under way (a festival, a time-limited change, a community gathering)
 - concluded: an official event has ended, or its results are in (a festival's final day, a games' medal table)
@@ -199,10 +198,10 @@ export function toEntries({ considered, picks }, candidates, { when, minAttentio
     }
     used.add(c);
     // A tag that does not belong to the tab is mapped rather than rejected: in UGC anything
-    // that is not an event is news; in the changelog, news is new.
+    // that is not an event is news; in the changelog, news becomes a neutral rebalance.
     let tag = p.tag;
     if (!CHANNEL_TAGS[p.channel].includes(tag)) {
-      tag = p.channel === "ugc" ? "news" : "new";
+      tag = p.channel === "ugc" ? "news" : "rebalance";
       console.warn(`  [${p.id}] retagged ${p.tag} → ${tag} for ${p.channel}`);
     }
     entries.push({

@@ -33,14 +33,15 @@ export const LIMITS = {
   seenDays: 21,        // how long a link is remembered so it is not judged twice
 };
 
-export const TAGS = ["new", "buff", "nerf", "rebalance", "event", "concluded", "known", "news"];
+export const TAGS = ["buff", "nerf", "rebalance", "event", "concluded", "known", "news"];
 export const PILLARS = ["rules", "animals", "food", "festivals", "weather", "wins"];
 // Site tabs: "changelog" is real changes to how Thailand works (tariffs, prices, rules, visas,
 // transport, public services, official season changes), plus official events being announced
 // and concluded; "ugc" (user-generated content) is what people did, found, won or celebrated.
 export const CHANNELS = ["changelog", "ugc"];
-// Which tags each tab uses. A story about people is only ever news or an event.
+// Which tags each tab uses. A story about people is only ever news or an event; in the
+// changelog everything is a patch note, so something new is a buff, a nerf or a rebalance.
 export const CHANNEL_TAGS = {
-  changelog: ["new", "buff", "nerf", "rebalance", "event", "concluded", "known"],
+  changelog: ["buff", "nerf", "rebalance", "event", "concluded", "known"],
   ugc: ["news", "event"],
 };
