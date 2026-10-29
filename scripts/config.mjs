@@ -3,7 +3,8 @@
 export const USER_AGENT = "ThailandChangelog/0.1 (+https://github.com/Muq1937/ThaiChangelog)";
 
 // Checked Oct 2026. Bangkok Post, TAT News and PPTV refused the connection; Nation Thailand,
-// Thai PBS World and Daily News returned pages without stories.
+// Thai PBS World and Daily News returned pages without stories; Thairath answers 403 to
+// GitHub's servers.
 export const FEEDS = [
   { url: "https://thethaiger.com/news/feed", lang: "en", name: { en: "Thaiger", th: "Thaiger" } },
   { url: "https://thethaiger.com/travel/feed", lang: "en", name: { en: "Thaiger", th: "Thaiger" } },
@@ -11,7 +12,6 @@ export const FEEDS = [
   { url: "https://www.khaosod.co.th/around-thailand/feed", lang: "th", name: { en: "Khaosod", th: "ข่าวสด" } },
   { url: "https://www.khaosod.co.th/lifestyle/feed", lang: "th", name: { en: "Khaosod", th: "ข่าวสด" } },
   { url: "https://www.matichon.co.th/region/feed", lang: "th", name: { en: "Matichon", th: "มติชน" } },
-  { url: "https://www.thairath.co.th/rss/news", lang: "th", name: { en: "Thairath", th: "ไทยรัฐ" } },
   { url: "https://rssfeeds.sanook.com/rss/feeds/sanook/news.index.xml", lang: "th", name: { en: "Sanook", th: "สนุก" } },
   { url: "https://rssfeeds.sanook.com/rss/feeds/sanook/travel.index.xml", lang: "th", name: { en: "Sanook", th: "สนุก" } },
 ];

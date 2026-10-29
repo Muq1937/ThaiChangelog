@@ -8,7 +8,7 @@ Site: https://muq1937.github.io/ThaiChangelog/ · RSS: [`feed.xml`](https://muq1
 
 Every hour GitHub Actions runs [`scripts/update.mjs`](scripts/update.mjs) ([`hourly.yml`](.github/workflows/hourly.yml)):
 
-1. Read the RSS feeds listed in [`scripts/config.mjs`](scripts/config.mjs) (English: Thaiger, Khaosod English; Thai: Khaosod, Matichon, Thairath, Sanook).
+1. Read the RSS feeds listed in [`scripts/config.mjs`](scripts/config.mjs) (English: Thaiger, Khaosod English; Thai: Khaosod, Matichon, Sanook).
 2. Drop links already judged, and stories older than 36 hours.
 3. Drop every hard-no topic with a keyword list in Thai and English ([`scripts/lib/blocklist.mjs`](scripts/lib/blocklist.mjs)), before the model sees anything.
 4. Send up to 40 headlines to Google Gemini, which picks at most 2 that fit the content pillars and writes each one in English and Thai ([`scripts/lib/prompt.mjs`](scripts/lib/prompt.mjs)).
