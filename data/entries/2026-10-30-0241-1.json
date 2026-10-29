@@ -1,0 +1,28 @@
+{
+  "id": "2026-10-30-0241-1",
+  "date": "2026-10-30",
+  "time": "02:41",
+  "channel": "changelog",
+  "tag": "concluded",
+  "pillar": "festivals",
+  "title": {
+    "en": "Naga Fireball event concludes: 316 fireballs spawned over two days",
+    "th": "สรุปอีเวนต์บั้งไฟพญานาค: ปรากฏ 316 ลูกตลอด 2 วัน"
+  },
+  "body": {
+    "en": "Official Nong Khai server stats confirm 316 Naga fireballs spawned during the two-day festival, attracting 193,200 participating players.",
+    "th": "สถิติจังหวัดหนองคายยืนยันบั้งไฟพญานาคเกิดขึ้นรวม 316 ลูก ตลอดเทศกาล 2 วัน โดยมีผู้เล่นเข้าร่วมชมงานทั้งหมด 193,200 คน"
+  },
+  "source": {
+    "name": {
+      "en": "Khaosod",
+      "th": "ข่าวสด"
+    },
+    "url": "https://www.khaosod.co.th/around-thailand/news_10454013",
+    "headline": "จุใจบั้งไฟพญานาคปีนี้ จังหวัดหนองคายสรุปยอดมีเกิดขึ้น 2 วัน รวม 316 ลูก นักท่องเที่ยว 193,200 คน"
+  },
+  "attention": {
+    "score": 8,
+    "reason": "Official wrap-up stats released for Nong Khai's famous annual Naga Fireball festival, drawing nearly 200,000 visitors."
+  }
+}
