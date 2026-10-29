@@ -124,7 +124,7 @@ function summaryMarkdown(entries, statsLine, when) {
     e.body.en,
     e.body.th,
     `Attention ${e.attention.score}/10: ${e.attention.reason}`,
-    `Source: [${e.source.headline}](${e.source.url}) (${e.source.name.en}) · ${e.date} ${e.time} · pillar: ${e.pillar} · file: \`data/entries/${e.id}.json\``,
+    `Source: [${e.source.headline}](${e.source.url}) (${e.source.name.en}) · ${e.date} ${e.time} · tab: ${e.channel} · pillar: ${e.pillar} · file: \`data/entries/${e.id}.json\``,
   ].join("\n\n"));
   return [
     `New stories from the ${when} (UTC+7) check. Merge to publish, close to discard, or edit the JSON files in this pull request to fix the wording first.`,
@@ -262,7 +262,7 @@ async function main() {
   let succeeded = 0;
   let failedInARow = 0;
   for (const [n, { label, batch }] of plan.entries()) {
-    if (n > 0) await sleep(6000); // stay under the free tier's requests-per-minute limit
+    if (n > 0) await sleep(BACKFILL_DAYS ? 15000 : 6000); // stay under the free tier's requests-per-minute limit
     const covered = [
       ...entries.filter((e) => now - Date.parse(`${e.date}T${e.time}:00+07:00`) < maxAge + 7 * DAY).map((e) => e.title.en),
       ...state.proposed.map((p) => p.title),
@@ -298,7 +298,7 @@ async function main() {
     for (const r of rejected) console.warn(`  Rejected pick ${r}`);
     for (const e of made) {
       e.id = newId(e);
-      console.log(`  → publishing [${TAG_LABEL[e.tag]}] ${e.title.en}`);
+      console.log(`  → publishing to ${e.channel}: [${TAG_LABEL[e.tag]}] ${e.title.en}`);
       if (!PREVIEW) {
         fs.mkdirSync(ENTRIES_DIR, { recursive: true });
         fs.writeFileSync(path.join(ENTRIES_DIR, `${e.id}.json`), JSON.stringify(e, null, 2) + "\n");

@@ -3,25 +3,32 @@
 //
 // GEMINI_MODEL is a comma-separated list tried in order. Models get overloaded and retired
 // (gemini-2.5-flash is already closed to new keys), so a busy, timed-out or missing model
-// falls through to the next one instead of failing the run.
+// falls through to the next one instead of failing the run. Flash-Lite comes second: it is
+// quicker and less congested, though a little weaker at judging and writing Thai.
 
 export class QuotaError extends Error {}
 class TryNextModel extends Error {
   constructor(message, { quota = false } = {}) { super(message); this.quota = quota; }
 }
 
-const DEFAULT_MODELS = "gemini-3.5-flash,gemini-flash-latest";
+const DEFAULT_MODELS = "gemini-3.5-flash,gemini-3.5-flash-lite,gemini-flash-latest";
 const API = "https://generativelanguage.googleapis.com/v1beta/models";
 const ATTEMPTS_PER_MODEL = 3;
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
 
-function retryDelaySeconds(res, data, attempt) {
+// Google's own suggestion, from the Retry-After header or the error's RetryInfo ("17s").
+function suggestedDelay(res, data) {
   const after = parseFloat(res?.headers.get("retry-after"));
   if (Number.isFinite(after)) return after;
   const info = data?.error?.details?.find((d) => String(d["@type"]).endsWith("RetryInfo"));
-  const suggested = parseFloat(info?.retryDelay); // e.g. "17s"
-  if (Number.isFinite(suggested)) return Math.min(suggested, 60);
-  return 2 ** (attempt + 1); // 2, 4 s
+  const suggested = parseFloat(info?.retryDelay);
+  return Number.isFinite(suggested) ? suggested : null;
+}
+
+// Which quotas a 429 names, e.g. "GenerateRequestsPerMinutePerProjectPerModel-FreeTier".
+function quotaIds(data) {
+  const failure = data?.error?.details?.find((d) => String(d["@type"]).endsWith("QuotaFailure"));
+  return (failure?.violations ?? []).map((v) => v.quotaId).filter(Boolean);
 }
 
 async function callModel(model, key, body) {
@@ -49,12 +56,21 @@ async function callModel(model, key, body) {
     if (res.status === 403 || (res.status === 400 && /api key/i.test(message))) {
       throw new Error(`Gemini rejected the API key (HTTP ${res.status}): ${message}`);
     }
-    // A per-minute limit or a busy server clears with a short wait; a daily quota does not.
-    if (res.status === 429 && /per ?day/i.test(text)) throw new TryNextModel(`${model} daily quota used up.`, { quota: true });
+    // A per-minute limit or a busy server clears with a short wait. Google says how long when
+    // it can; a 429 with no suggested wait that names only per-day quotas means the day's
+    // allowance for this model is spent.
     if (res.status === 429 || res.status >= 500) {
-      if (last) throw new TryNextModel(`${model} kept returning ${res.status}.`, { quota: res.status === 429 });
-      const wait = retryDelaySeconds(res, data, attempt);
-      console.warn(`${model} returned ${res.status}; retrying in ${wait}s.`);
+      const ids = res.status === 429 ? quotaIds(data) : [];
+      const delay = suggestedDelay(res, data);
+      const quotaNote = ids.length ? ` (${ids.join(", ")})` : "";
+      if (res.status === 429 && delay === null && ids.length && ids.every((id) => /PerDay/i.test(id))) {
+        throw new TryNextModel(`${model} daily quota used up${quotaNote}.`, { quota: true });
+      }
+      if (last || (delay ?? 0) > 90) {
+        throw new TryNextModel(`${model} kept returning ${res.status}${quotaNote}.`, { quota: res.status === 429 });
+      }
+      const wait = delay ?? 2 ** (attempt + 1); // 2, 4 s
+      console.warn(`${model} returned ${res.status}${quotaNote}; retrying in ${wait}s.`);
       await sleep(wait * 1000);
       continue;
     }

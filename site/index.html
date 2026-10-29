@@ -75,7 +75,7 @@ a{color:inherit}
 .tag-known{--tag:var(--t-known)}
 
 .cl{max-width:760px; margin-inline:auto; padding-top:36px}
-.cl-top{display:flex; flex-wrap:wrap; align-items:flex-start; justify-content:space-between; gap:16px; padding-bottom:22px; border-bottom:1px solid var(--line)}
+.cl-top{display:flex; flex-wrap:wrap; align-items:flex-start; justify-content:space-between; gap:16px; padding-bottom:10px}
 .cl-top > div{flex:1 1 320px; min-width:0}
 .cl-path{font-family:var(--font-mono); font-size:13px; color:var(--muted)}
 .cl-path b{font-weight:500; color:var(--accent)}
@@ -94,6 +94,17 @@ html[lang="th"] .cl-top h1{letter-spacing:0}
 .theme-btn{width:38px; height:38px; display:grid; place-items:center; border:1px solid var(--line); border-radius:8px; background:var(--surface); color:var(--fg)}
 .theme-btn:hover{color:var(--accent)}
 .theme-btn svg{width:18px; height:18px}
+
+.cl-tabs{display:flex; flex-wrap:wrap; gap:4px; border-bottom:1px solid var(--line)}
+.cl-tab{
+  display:inline-flex; align-items:center; gap:8px; margin-bottom:-1px; padding:10px 14px;
+  border-bottom:2px solid transparent; font-family:var(--font-mono); font-size:13.5px;
+  color:var(--muted); text-decoration:none;
+}
+.cl-tab span{font-size:12px; opacity:.75}
+.cl-tab:hover{color:var(--fg)}
+.cl-tab[aria-current="page"]{color:var(--fg); font-weight:500; border-bottom-color:var(--accent)}
+.cl-intro{padding-top:14px; max-width:60ch; font-size:14px; color:var(--muted)}
 
 .cl-filters{display:flex; flex-wrap:wrap; gap:6px; padding-block:16px; border-bottom:1px solid var(--line)}
 .cl-filter{
@@ -161,7 +172,11 @@ html[lang="th"] .cl-top h1{letter-spacing:0}
       loading: "Loading patch notes…",
       error: "Couldn't load the patch notes. Refresh the page to try again.",
       empty: "No patches yet. The first stories arrive after the next hourly check.",
+      emptyUgc: "No user-generated content yet. Stories about everyday people that the whole country shares will show up here.",
       emptyFilter: "No entries with this tag yet.",
+      tabsLabel: "Sections",
+      tabs: { changelog: "Changelog", ugc: "UGC" },
+      ugcIntro: "User-generated content: ordinary people and local communities doing things the whole country is sharing.",
       more: "Show older patches",
       original: "Original headline",
       toDark: "Switch to dark mode",
@@ -182,7 +197,11 @@ html[lang="th"] .cl-top h1{letter-spacing:0}
       loading: "กำลังโหลดแพตช์โน้ต…",
       error: "โหลดแพตช์โน้ตไม่สำเร็จ ลองรีเฟรชหน้านี้อีกครั้ง",
       empty: "ยังไม่มีแพตช์ เรื่องแรกจะมาหลังการตรวจข่าวรอบถัดไป",
+      emptyUgc: "ยังไม่มีคอนเทนต์จากผู้เล่น เรื่องของคนธรรมดาที่คนแชร์กันทั้งประเทศจะมาอยู่ที่นี่",
       emptyFilter: "ยังไม่มีรายการในประเภทนี้",
+      tabsLabel: "หมวด",
+      tabs: { changelog: "เชนจ์ล็อก", ugc: "UGC" },
+      ugcIntro: "คอนเทนต์จากผู้เล่น: เรื่องของคนธรรมดาและชุมชนที่คนทั้งประเทศแชร์ต่อ",
       more: "ดูแพตช์ก่อนหน้า",
       original: "พาดหัวต้นฉบับ",
       toDark: "เปลี่ยนเป็นโหมดมืด",
@@ -208,9 +227,13 @@ html[lang="th"] .cl-top h1{letter-spacing:0}
   const esc = s => String(s ?? "").replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
   const safeUrl = u => /^https?:\/\//i.test(u || "") ? u : null;
 
+  const TABS = ["changelog", "ugc"];
+  const tabFromHash = () => location.hash === "#ugc" ? "ugc" : "changelog";
+
   const savedLang = store.get("lang");
   const state = {
     lang: savedLang === "th" || savedLang === "en" ? savedLang : ((navigator.language || "").toLowerCase().startsWith("th") ? "th" : "en"),
+    tab: tabFromHash(),
     filter: "all",
     pages: 1,
     status: "loading",
@@ -254,12 +277,23 @@ html[lang="th"] .cl-top h1{letter-spacing:0}
     </li>`;
   }
 
+  // Entries without a channel predate the tabs and belong to the changelog.
+  const inTab = (tab) => state.entries.filter(e => (e.channel || "changelog") === tab);
+
+  function tabs() {
+    const s = S[state.lang];
+    return `<nav class="cl-tabs" aria-label="${s.tabsLabel}">${TABS.map(t => `
+      <a class="cl-tab" href="#${t}" data-tab="${t}"${state.tab === t ? ' aria-current="page"' : ""}>${s.tabs[t]}${state.status === "ready" ? `<span class="tnum">${inTab(t).length}</span>` : ""}</a>`).join("")}
+    </nav>${state.tab === "ugc" ? `<p class="cl-intro">${s.ugcIntro}</p>` : ""}`;
+  }
+
   function releases() {
     const s = S[state.lang];
     if (state.status === "loading") return `<p class="cl-note">${s.loading}</p>`;
     if (state.status === "error") return `<p class="cl-note">${s.error}</p>`;
-    if (!state.entries.length) return `<p class="cl-note">${s.empty}</p>`;
-    const visible = state.entries.filter(e => state.filter === "all" || e.tag === state.filter);
+    const entries = inTab(state.tab);
+    if (!entries.length) return `<p class="cl-note">${state.tab === "ugc" ? s.emptyUgc : s.empty}</p>`;
+    const visible = entries.filter(e => state.filter === "all" || e.tag === state.filter);
     if (!visible.length) return `<p class="cl-note">${s.emptyFilter}</p>`;
     const days = [...new Set(visible.map(e => e.date))];
     const shown = days.slice(0, state.pages * DAYS_PER_PAGE);
@@ -273,9 +307,10 @@ html[lang="th"] .cl-top h1{letter-spacing:0}
   }
 
   function filters() {
-    if (state.status !== "ready" || !state.entries.length) return "";
+    const entries = inTab(state.tab);
+    if (state.status !== "ready" || !entries.length) return "";
     const s = S[state.lang], t = TAG[state.lang];
-    const count = k => state.entries.filter(e => k === "all" || e.tag === k).length;
+    const count = k => entries.filter(e => k === "all" || e.tag === k).length;
     return `<div class="cl-filters" role="group" aria-label="${s.filterLabel}">${["all", ...TAG_ORDER].map(k => `
       <button type="button" class="cl-filter${k === "all" ? "" : " tag-" + k}" data-filter="${k}" aria-pressed="${state.filter === k}">${k === "all" ? s.all : t[k]}<span class="tnum">${count(k)}</span></button>`).join("")}
     </div>`;
@@ -288,13 +323,14 @@ html[lang="th"] .cl-top h1{letter-spacing:0}
     app.innerHTML = `
       <header class="cl-top">
         <div>
-          <p class="cl-path">thailand-changelog / <b>CHANGELOG</b></p>
+          <p class="cl-path">thailand-changelog / <b>${state.tab === "ugc" ? "UGC" : "CHANGELOG"}</b></p>
           <h1>${s.name}</h1>
           <p class="cl-sub">${s.tagline}</p>
           <p class="cl-status"><span class="cl-pulse"></span>${s.status}</p>
         </div>
         ${controls()}
       </header>
+      ${tabs()}
       ${filters()}
       ${releases()}
       <footer class="cl-foot">
@@ -336,6 +372,14 @@ html[lang="th"] .cl-top h1{letter-spacing:0}
     }
   });
   darkMQ.addEventListener("change", syncThemeButton);
+  addEventListener("hashchange", () => {
+    const tab = tabFromHash();
+    if (tab === state.tab) return;
+    state.tab = tab;
+    state.filter = "all";
+    state.pages = 1;
+    render(`[data-tab="${tab}"]`);
+  });
 
   render();
   fetch("entries.json", { cache: "no-cache" })

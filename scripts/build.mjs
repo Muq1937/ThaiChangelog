@@ -53,7 +53,7 @@ const xml = (s) => String(s).replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&
 function rss(lang) {
   const ch = CHANNEL[lang];
   const items = entries.slice(0, FEED_ITEMS).map((e) => `    <item>
-      <title>${xml(`[${TAG_LABEL[lang][e.tag]}] ${e.title[lang]}`)}</title>
+      <title>${xml(`${e.channel === "ugc" ? "[UGC] " : ""}[${TAG_LABEL[lang][e.tag]}] ${e.title[lang]}`)}</title>
       <link>${xml(e.source.url)}</link>
       <guid isPermaLink="false">thailand-changelog:${xml(e.id)}</guid>
       <pubDate>${new Date(`${e.date}T${e.time}:00+07:00`).toUTCString()}</pubDate>

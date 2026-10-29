@@ -1,5 +1,5 @@
 // What the model is asked, and how its answer is checked before anything is saved.
-import { TAGS, PILLARS } from "../config.mjs";
+import { TAGS, PILLARS, CHANNELS } from "../config.mjs";
 import { blockedTerm } from "./blocklist.mjs";
 
 export const systemPrompt = ({ minAttention }) => `You are the editor of Thailand Changelog, a website that rewrites real news from Thailand as video-game patch notes, in English and Thai.
@@ -44,6 +44,12 @@ TONE
   title_th "ขยายเวลาแพตช์หน้าฝน ร่มยังแรงเกินไปเหมือนเดิม"
   body_th "พายุช่วงบ่ายยังเกิดถี่ทั่วกรุงเทพฯ ยังไม่มีกำหนดแก้ไข แนะนำให้ผู้เล่นสวมเสื้อกันฝนไว้ก่อน"
 
+CHANNEL
+The site has two tabs. Put each pick in one:
+- "changelog": stories about Thailand itself: its animals, places, food, festivals, weather and national achievements.
+- "ugc" (user-generated content): stories whose main character is an ordinary person or a local community (villagers, vendors, shop staff, farmers, tourists) doing something people share: a viral clip, an unusual skill, a homemade invention, a village custom, a kind act.
+In every note, and especially "ugc" ones, never mock the person, and never name a private individual. Describe them by role or place instead (a 7-Eleven clerk, a grandmother in Nan).
+
 TAGS
 - new: something new appears (an animal birth, a new attraction, a discovery)
 - buff: something got better
@@ -82,6 +88,7 @@ export const replySchema = {
         type: "OBJECT",
         properties: {
           id: int,
+          channel: { type: "STRING", enum: CHANNELS },
           tag: { type: "STRING", enum: TAGS },
           pillar: { type: "STRING", enum: PILLARS },
           title_en: str,
@@ -89,8 +96,8 @@ export const replySchema = {
           body_en: str,
           body_th: str,
         },
-        required: ["id", "tag", "pillar", "title_en", "title_th", "body_en", "body_th"],
-        propertyOrdering: ["id", "tag", "pillar", "title_en", "title_th", "body_en", "body_th"],
+        required: ["id", "channel", "tag", "pillar", "title_en", "title_th", "body_en", "body_th"],
+        propertyOrdering: ["id", "channel", "tag", "pillar", "title_en", "title_th", "body_en", "body_th"],
       },
     },
   },
@@ -162,6 +169,7 @@ export function toEntries({ considered, picks }, candidates, { when, minAttentio
       used.has(c) ? "headline picked twice" :
       !score ? "picked without an attention score" :
       !(score.attention >= minAttention) ? `attention ${score.attention} is below ${minAttention}` :
+      !CHANNELS.includes(p.channel) ? `unknown channel "${p.channel}"` :
       !TAGS.includes(p.tag) ? `unknown tag "${p.tag}"` :
       !PILLARS.includes(p.pillar) ? `unknown pillar "${p.pillar}"` :
       fieldProblem(p);
@@ -175,6 +183,7 @@ export function toEntries({ considered, picks }, candidates, { when, minAttentio
     entries.push({
       id: "",
       ...when(c),
+      channel: p.channel,
       tag: p.tag,
       pillar: p.pillar,
       title: { en: p.title_en.trim(), th: p.title_th.trim() },

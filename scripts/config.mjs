@@ -33,3 +33,6 @@ export const LIMITS = {
 
 export const TAGS = ["new", "buff", "balance", "event", "known"];
 export const PILLARS = ["animals", "food", "festivals", "weather", "wins"];
+// Site tabs: "changelog" is Thailand itself; "ugc" (user-generated content) is ordinary
+// people and local communities doing something the country shares.
+export const CHANNELS = ["changelog", "ugc"];
