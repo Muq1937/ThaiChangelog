@@ -28,7 +28,7 @@ The list of links already judged is kept in the Actions cache (`.state/`), not i
 
 **Two tabs:** *Changelog* is real changes to how Thailand works, like "Thailand cuts the tariff on X": tariffs, taxes, prices, visa rules, regulations, transport, public services, official season changes. If nothing changed, it isn't changelog. *UGC* (user-generated content) is everything people did, found, won or celebrated: athletes winning medals, someone spotting a rare animal, festivals, villagers, vendors and viral clips. Gemini picks the tab for each story (the `channel` field). Notes never name private individuals or make fun of them.
 
-**Tags:** NEW, BUFF, NERF, REBALANCE, EVENT, EVENT CONCLUDED (medals, prizes, results, a festival's last day) and KNOWN ISSUE (everyday weather and traffic).
+**Tags:** each tab has its own. *Changelog*: NEW, BUFF, NERF, REBALANCE, EVENT and KNOWN ISSUE (everyday weather and traffic). *UGC*: NEW, EVENT and EVENT CONCLUDED (medals, prizes, results, a festival's last day). If Gemini picks a tag from the wrong tab, the code maps it: in UGC to NEW, in Changelog to EVENT.
 
 **The bar:** a story needs real public attention. The benchmark is Moo Deng. Each run's log (Actions → News check → a run → "Find and write stories") lists what Gemini considered and the score it gave, so near-misses are visible. To publish more or less, change `minAttention` in [`scripts/config.mjs`](scripts/config.mjs).
 

@@ -1,5 +1,5 @@
 // What the model is asked, and how its answer is checked before anything is saved.
-import { TAGS, PILLARS, CHANNELS } from "../config.mjs";
+import { TAGS, PILLARS, CHANNELS, CHANNEL_TAGS } from "../config.mjs";
 import { blockedTerm } from "./blocklist.mjs";
 
 export const systemPrompt = ({ minAttention }) => `You are the editor of Thailand Changelog, a website that rewrites real news from Thailand as video-game patch notes, in English and Thai.
@@ -67,6 +67,7 @@ TAGS
 - event: a festival or time-limited happening that is coming up or under way
 - concluded: an event or competition has finished: medals, prizes, awards, results, a festival's final day
 - known: a recurring everyday annoyance (weather, traffic). Only minor inconvenience, never a disaster.
+Each tab has its own tags. "changelog" notes use ${CHANNEL_TAGS.changelog.join(", ")}. "ugc" notes use only ${CHANNEL_TAGS.ugc.join(", ")}: a story about people is news (new), something coming up or under way (event), or a result (concluded).
 
 WRITING
 Write every note in both languages. The Thai must read naturally, as a Thai gamer would write it, not as a word-for-word translation. Gaming loanwords such as บัฟ, เนิร์ฟ, อีเวนต์ and แพตช์ are welcome. In Thai text, write years in the Buddhist Era (2026 is 2569).
@@ -196,11 +197,18 @@ export function toEntries({ considered, picks }, candidates, { when, minAttentio
       continue;
     }
     used.add(c);
+    // A tag that does not belong to the tab is mapped rather than rejected: in UGC anything
+    // that is not an event or a result is news; in the changelog a result is an event.
+    let tag = p.tag;
+    if (!CHANNEL_TAGS[p.channel].includes(tag)) {
+      tag = p.channel === "ugc" ? "new" : "event";
+      console.warn(`  [${p.id}] retagged ${p.tag} → ${tag} for ${p.channel}`);
+    }
     entries.push({
       id: "",
       ...when(c),
       channel: p.channel,
-      tag: p.tag,
+      tag,
       pillar: p.pillar,
       title: { en: p.title_en.trim(), th: p.title_th.trim() },
       body: { en: p.body_en.trim(), th: p.body_th.trim() },

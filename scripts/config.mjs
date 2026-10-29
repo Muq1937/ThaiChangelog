@@ -39,3 +39,9 @@ export const PILLARS = ["rules", "animals", "food", "festivals", "weather", "win
 // transport, public services, official season changes); "ugc" (user-generated content) is what
 // people did, found, won or celebrated.
 export const CHANNELS = ["changelog", "ugc"];
+// Buff, nerf and rebalance describe a change to the country, so they are changelog-only;
+// a story about people is either news or an event.
+export const CHANNEL_TAGS = {
+  changelog: ["new", "buff", "nerf", "rebalance", "event", "known"],
+  ugc: ["new", "event", "concluded"],
+};

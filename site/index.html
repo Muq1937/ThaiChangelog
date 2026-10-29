@@ -155,6 +155,10 @@ html[lang="th"] .cl-top h1{letter-spacing:0}
   const root = document.documentElement;
   const app = document.getElementById("app");
   const TAG_ORDER = ["new", "buff", "nerf", "rebalance", "event", "concluded", "known"];
+  const TAB_TAGS = {
+    changelog: ["new", "buff", "nerf", "rebalance", "event", "known"],
+    ugc: ["new", "event", "concluded"]
+  };
   const DAYS_PER_PAGE = 10;
   const REPO = "https://github.com/Muq1937/ThaiChangelog";
 
@@ -313,7 +317,8 @@ html[lang="th"] .cl-top h1{letter-spacing:0}
     if (state.status !== "ready" || !entries.length) return "";
     const s = S[state.lang], t = TAG[state.lang];
     const count = k => entries.filter(e => k === "all" || e.tag === k).length;
-    return `<div class="cl-filters" role="group" aria-label="${s.filterLabel}">${["all", ...TAG_ORDER].map(k => `
+    const tags = TAG_ORDER.filter(k => TAB_TAGS[state.tab].includes(k) || entries.some(e => e.tag === k));
+    return `<div class="cl-filters" role="group" aria-label="${s.filterLabel}">${["all", ...tags].map(k => `
       <button type="button" class="cl-filter${k === "all" ? "" : " tag-" + k}" data-filter="${k}" aria-pressed="${state.filter === k}">${k === "all" ? s.all : t[k]}<span class="tnum">${count(k)}</span></button>`).join("")}
     </div>`;
   }
