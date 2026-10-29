@@ -1,0 +1,28 @@
+{
+  "id": "2026-10-29-1110-1",
+  "date": "2026-10-29",
+  "time": "11:10",
+  "channel": "changelog",
+  "tag": "known",
+  "pillar": "weather",
+  "title": {
+    "en": "Runway physics bug: China Airlines wheels get stuck at Suvarnabhumi",
+    "th": "บัฟฟิสิกส์รันเวย์! ล้อเครื่องบินติดพื้นที่สุวรรณภูมิ"
+  },
+  "body": {
+    "en": "A spawn glitch temporarily trapped an aircraft's landing gear on the tarmac before takeoff. Players heading to Kaohsiung experienced a brief server delay.",
+    "th": "เกิดบัฟขัดข้องทำให้ล้อเครื่องบินติดพื้นผิวรันเวย์ก่อนทะยานขึ้น ผู้เล่นที่กำลังเดินทางไปเกาสงต้องรอการแก้ไขชั่วคราว"
+  },
+  "source": {
+    "name": {
+      "en": "ผู้จัดการออนไลน์",
+      "th": "ผู้จัดการออนไลน์"
+    },
+    "url": "https://mgronline.com/onlinesection/detail/9690000103829",
+    "headline": "ระทึกสุวรรณภูมิ! เครื่องบิน China Airlines ล้อจมติดหัวทางวิ่ง ก่อนทะยานสู่เกาสง จี้การท่าฯ เร่งตอบโจทย์ความปลอดภัย"
+  },
+  "attention": {
+    "score": 8,
+    "reason": "Covered by major Thai outlets reporting a runway incident involving a China Airlines flight at Suvarnabhumi."
+  }
+}

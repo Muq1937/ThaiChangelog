@@ -1,0 +1,28 @@
+{
+  "id": "2026-10-15-1421-1",
+  "date": "2026-10-15",
+  "time": "14:21",
+  "channel": "changelog",
+  "tag": "known",
+  "pillar": "weather",
+  "title": {
+    "en": "Winter season patch delayed by one week",
+    "th": "เลื่อนอัปเดตแพตช์ฤดูหนาวออกไป 1 สัปดาห์"
+  },
+  "body": {
+    "en": "The Meteorological Department announced winter will arrive a week late this year. Players in upper Thailand can expect lows around 19°C once the patch deploys.",
+    "th": "กรมอุตุนิยมวิทยาประกาศว่าฤดูหนาวปีนี้มาช้ากว่าปกติ 1 สัปดาห์ คาดว่าเมื่อแพตช์ทำงานแล้ว พื้นที่ตอนบนของไทยจะมีอุณหภูมิต่ำสุดราว 19 องศาเซลเซียส"
+  },
+  "source": {
+    "name": {
+      "en": "Khaosod English",
+      "th": "Khaosod English"
+    },
+    "url": "https://www.khaosodenglish.com/featured/2026/10/15/thailands-winter-to-arrive-a-week-late-with-bangkok-lows-of-19c/",
+    "headline": "Thailand’s winter to arrive a week late, with Bangkok lows of 19C"
+  },
+  "attention": {
+    "score": 8,
+    "reason": "Official Meteorological Department announcement of the delayed winter season is an anticipated national update, supported by related news."
+  }
+}

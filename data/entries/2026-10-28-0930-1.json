@@ -1,0 +1,28 @@
+{
+  "id": "2026-10-28-0930-1",
+  "date": "2026-10-28",
+  "time": "09:30",
+  "channel": "changelog",
+  "tag": "event",
+  "pillar": "festivals",
+  "title": {
+    "en": "Pattaya Bikini Beach Race spawns 10th anniversary Halloween event",
+    "th": "อีเวนต์วิ่งบิกินี่พัทยาฉลองครบรอบ 10 ปี ธีมฮาโลวีน"
+  },
+  "body": {
+    "en": "Over 5,000 players from 30 countries are queuing up for the 5-kilometer coastal run. Grab your costume and join the seasonal server.",
+    "th": "ผู้เล่นกว่า 5,000 คนจาก 30 ประเทศเตรียมลงวิ่งริมชายหาด 5 กิโลเมตร เตรียมชุดของคุณแล้วเข้าเซิร์ฟเวอร์อีเวนต์นี้ได้เลย"
+  },
+  "source": {
+    "name": {
+      "en": "Thaiger",
+      "th": "Thaiger"
+    },
+    "url": "https://thethaiger.com/news/pattaya/pattaya-bikini-beach-race-halloween-2026",
+    "headline": "Pattaya Bikini Beach Race returns October 31 with Halloween theme"
+  },
+  "attention": {
+    "score": 8,
+    "reason": "Covered by Thaiger as an upcoming major recurring annual event with thousands of participants."
+  }
+}
