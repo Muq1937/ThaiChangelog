@@ -1,17 +1,17 @@
 # Thailand Changelog
 
-Real news from Thailand, rewritten as video-game patch notes in Thai and English. Checked every hour.
+Real news from Thailand, rewritten as video-game patch notes in Thai and English. Checked every two hours.
 
 Site: https://muq1937.github.io/ThaiChangelog/ · RSS: [`feed.xml`](https://muq1937.github.io/ThaiChangelog/feed.xml) (English), [`feed-th.xml`](https://muq1937.github.io/ThaiChangelog/feed-th.xml) (Thai)
 
 ## How it works
 
-Every hour GitHub Actions runs [`scripts/update.mjs`](scripts/update.mjs) ([`hourly.yml`](.github/workflows/hourly.yml)):
+Every two hours GitHub Actions runs [`scripts/update.mjs`](scripts/update.mjs) ([`news-check.yml`](.github/workflows/news-check.yml)). That's 12 runs a day, usually one Gemini request each, which keeps within the free tier's 20 requests per model per day:
 
 1. Read the RSS feeds listed in [`scripts/config.mjs`](scripts/config.mjs) (English: Thaiger, Khaosod English; Thai: Khaosod, Matichon, Sanook), plus [Google Trends for Thailand](https://trends.google.com/trending?geo=TH): what people are searching for right now, with linked articles.
 2. Drop links already judged, and stories older than 36 hours.
 3. Drop every hard-no topic with a keyword list in Thai and English ([`scripts/lib/blocklist.mjs`](scripts/lib/blocklist.mjs)), before the model sees anything.
-4. Send the new headlines to Google Gemini in batches of 40, with the trending searches and nearby headlines as context ([`scripts/lib/prompt.mjs`](scripts/lib/prompt.mjs)). Gemini scores the best few for **public attention** (1-10): is it trending, covered by several outlets, called viral, the kind of thing people forward? Every story scoring **8 or more** is written up, in English and Thai; there is no cap. Most hours nothing qualifies, and nothing is published.
+4. Send the new headlines to Google Gemini in batches of 60, with the trending searches and nearby headlines as context ([`scripts/lib/prompt.mjs`](scripts/lib/prompt.mjs)). Gemini scores the best few for **public attention** (1-10): is it trending, covered by several outlets, called viral, the kind of thing people forward? Every story scoring **8 or more** is written up, in English and Thai; there is no cap. Most hours nothing qualifies, and nothing is published.
 5. Check the reply in code: the attention score, tab, tags, lengths, language, and the blocklist again. Save each story as its own file in `data/entries/`.
 6. **Review mode** (default): open a pull request. Merging it publishes. **Auto mode**: commit straight to `main`.
 7. [`scripts/build.mjs`](scripts/build.mjs) turns the entries into the site ([`site/index.html`](site/index.html)), `entries.json` and the two RSS feeds, and [`deploy.yml`](.github/workflows/deploy.yml) publishes them to GitHub Pages.
@@ -28,16 +28,16 @@ The list of links already judged is kept in the Actions cache (`.state/`), not i
 
 **Two tabs:** *Changelog* is Thailand itself: animals, places, festivals, weather, national wins. *UGC* (user-generated content) is ordinary people and local communities doing something the country shares, such as villagers, vendors and viral clips. Gemini picks the tab for each story (the `channel` field). Notes never name private individuals or make fun of them.
 
-**The bar:** a story needs real public attention. The benchmark is Moo Deng. Each run's log (Actions → Hourly news check → a run → "Find and write stories") lists what Gemini considered and the score it gave, so near-misses are visible. To publish more or less, change `minAttention` in [`scripts/config.mjs`](scripts/config.mjs).
+**The bar:** a story needs real public attention. The benchmark is Moo Deng. Each run's log (Actions → News check → a run → "Find and write stories") lists what Gemini considered and the score it gave, so near-misses are visible. To publish more or less, change `minAttention` in [`scripts/config.mjs`](scripts/config.mjs).
 
-**Backfill:** Actions → Hourly news check → Run workflow, with *backfill days* set to, say, 14. It reads older pages of the feeds that offer them (Thaiger, Khaosod English, Matichon; Khaosod Lifestyle already spans about two weeks) and judges one day at a time. Stories are dated to when they were reported.
+**Backfill:** Actions → News check → Run workflow, with *backfill days* set to, say, 14. A backfill makes one request per day of news, so run it on a day with free quota to spare. It reads older pages of the feeds that offer them (Thaiger, Khaosod English, Matichon; Khaosod Lifestyle already spans about two weeks) and judges one day at a time. Stories are dated to when they were reported.
 
 ## Setup
 
 1. **Settings → Pages → Source:** GitHub Actions.
 2. **Settings → Actions → General → Workflow permissions:** tick *Allow GitHub Actions to create and approve pull requests* (needed for review mode).
 3. **Settings → Secrets and variables → Actions → Secrets:** add `GEMINI_API_KEY`.
-4. **Actions → Hourly news check → Run workflow** to test it once.
+4. **Actions → News check → Run workflow** to test it once.
 
 Optional repository **variables** (same page, Variables tab):
 

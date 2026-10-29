@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-// Hourly job. Reads the Thai news feeds and Google Trends for Thailand, drops hard-no topics and
+// Runs every two hours. Reads the Thai news feeds and Google Trends for Thailand, drops hard-no topics and
 // links it has already judged, and asks the model, in batches, which stories have real public
 // attention. Every story scored LIMITS.minAttention or higher is written up; most runs publish
 // nothing. Each note is saved as its own file in data/entries/.

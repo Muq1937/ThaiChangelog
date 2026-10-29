@@ -1,4 +1,4 @@
-// Sources, limits and vocabulary for the hourly pipeline. Edit this file to add or drop a feed.
+// Sources, limits and vocabulary for the news pipeline. Edit this file to add or drop a feed.
 
 export const USER_AGENT = "ThailandChangelog/0.1 (+https://github.com/Muq1937/ThaiChangelog)";
 
@@ -24,7 +24,7 @@ export const TRENDS_URL = "https://trends.google.com/trending/rss?geo=TH";
 export const LIMITS = {
   minAttention: 8,     // public-attention score (1-10) a story needs; every story at or above it is published
   maxAgeHours: 36,     // skip stories older than this (a backfill uses its own number of days)
-  batchSize: 40,       // headlines judged per model call; a run makes as many calls as it needs
+  batchSize: 60,       // headlines judged per model call; sized so a two-hour run usually needs one call
   contextHours: 48,    // nearby headlines shown as context, to judge how widely a story is covered
   contextLines: 250,
   maxPages: 40,        // how many older pages a backfill may read per paged feed
