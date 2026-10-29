@@ -44,7 +44,7 @@ Optional repository **variables** (same page, Variables tab):
 | Variable | Default | Meaning |
 |---|---|---|
 | `PUBLISH_MODE` | `review` | `review` opens a pull request per batch; `auto` publishes directly |
-| `GEMINI_MODEL` | `gemini-3.5-flash,gemini-3.5-flash-lite,gemini-flash-latest` | Models to try, in order. The next one is used when one is overloaded, rate-limited or retired |
+| `GEMINI_MODEL` | `gemini-3.5-flash,gemini-flash-latest` | Models to try, in order. The next one is used when one is overloaded, rate-limited or retired |
 
 ## Running it locally
 
@@ -65,8 +65,7 @@ node scripts/build.mjs              # build the site into _site/
 
 A failed scheduled run sends GitHub's usual failure email. The run log says which step failed.
 
-- **"No Gemini model answered"**: Gemini was overloaded (HTTP 503). The next hourly run judges the same headlines again.
-- **"Gemini quota exhausted"**: the free-tier limit for the day was reached. It resets daily.
+- **A yellow warning, "No batch could be judged"**: Gemini was overloaded (HTTP 503) or the free tier's daily allowance ran out (20 requests per model per day). This is not a failure: the headlines wait for the next run that can judge them, for up to 36 hours.
 - **"Gemini rejected the API key"**: replace the `GEMINI_API_KEY` secret.
 - **A feed failed**: the run continues with the other feeds. If a feed keeps failing, remove or replace it in `scripts/config.mjs`.
 

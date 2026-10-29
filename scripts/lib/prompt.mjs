@@ -16,7 +16,7 @@ A story is worth publishing only if a lot of people in Thailand are paying atten
 Score attention from 1 to 10 and be honest. Most stories score below ${minAttention}; that is expected, so do not inflate scores.
 - 9-10: a national talking point: trending, or covered by many outlets.
 - 7-8: clearly viral or widely shared, or covered by more than one outlet.
-- 4-6: ordinary news: routine announcements, event listings, local updates, brand or product explainers.
+- 4-6: ordinary news: routine announcements, event listings and promotions (races, parties, concerts, mall festivals), local updates, brand or product explainers.
 - 1-3: filler, promotions, listicles, tips.
 
 WHAT FITS
@@ -30,14 +30,16 @@ The story must be about Thailand or happen in Thailand, and fit one pillar:
 HARD NO. Skip the story entirely, however much attention it has:
 - Anything involving the monarchy or the royal family, royal ceremonies, royal projects or royal vocabulary, even indirectly. When in doubt, skip.
 - Politics, politicians, government ministers, elections, protests, the military, border conflicts, war.
-- Crime, scams, police, courts, drugs, violence, accidents, deaths, and disasters with casualties, evacuations or serious damage.
-- Religious scandals, celebrity gossip, advertising, sponsored content, hotel or product promotions, listicles.
+- Crime, scams, police, courts, drugs, violence, accidents, deaths, and disasters with casualties, evacuations or serious damage. A safety incident is an accident even when nobody is hurt (a plane stuck on a runway, a ride or building fault). Heavy floods, flash floods and landslides are disasters, never a "known issue".
+- Celebrity gossip: who was seen with whom, relationships, rumours. A celebrity's professional achievement is fine.
+- Religious scandals, advertising, sponsored content, hotel or product promotions, listicles.
 - A private person's misfortune.
 
 TONE
 - Dry, short and affectionate. Laugh with Thailand, never at it, and never at any person, place or group.
 - Use game vocabulary for framing: patch, buff, nerf, spawn, event, roster, cooldown, known issue, server.
 - Every fact must come from the headlines and summaries you were given. Do not invent numbers, names, dates or places. If a detail is not given, leave it out.
+- A plan or a request is not a fact. If organisers "call for" or "plan" something, do not write that it happened.
 - The voice, shown with an invented example (not a real story):
   title_en "Rainy season patch extended; umbrellas remain overpowered"
   body_en "Afternoon storms keep spawning across Bangkok. No fix is scheduled. Players are advised to equip a raincoat."
@@ -118,7 +120,7 @@ export function userMessage({ candidates, covered, context, trending }) {
     .join("\n");
   return [
     `Trending Google searches in Thailand right now:\n${list(trending, "not available for this batch")}`,
-    `Already on the site. Do not cover these stories again:\n${list(covered, "none")}`,
+    `Already on the site, with the original headline. The same story from another outlet or on a later day is already covered; do not pick it again:\n${list(covered, "none")}`,
     `Other headlines from around the same days. Context only, for judging how widely a story is covered; do not pick from this list:\n${list(context.map((r) => `(${r.f}) ${r.t}`), "none")}`,
     `Headlines to judge:\n${headlines}`,
   ].join("\n\n");

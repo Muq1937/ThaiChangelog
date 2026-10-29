@@ -17,7 +17,7 @@ import { fileURLToPath } from "node:url";
 import { FEEDS, LIMITS, TRENDS_URL } from "./config.mjs";
 import { fetchFeed, fetchFeedHistory, fetchTrends } from "./lib/rss.mjs";
 import { blockedTerm } from "./lib/blocklist.mjs";
-import { chat, QuotaError } from "./lib/llm.mjs";
+import { chat, QuotaError, OutageError } from "./lib/llm.mjs";
 import { systemPrompt, replySchema, userMessage, parseReply, toEntries } from "./lib/prompt.mjs";
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
@@ -261,12 +261,14 @@ async function main() {
   const notes = [];
   let succeeded = 0;
   let failedInARow = 0;
+  let lastFailure = null;
   for (const [n, { label, batch }] of plan.entries()) {
     if (n > 0) await sleep(BACKFILL_DAYS ? 15000 : 6000); // stay under the free tier's requests-per-minute limit
+    const withHeadline = (e) => `${e.title.en} (original: ${e.source?.headline ?? "unknown"})`;
     const covered = [
-      ...entries.filter((e) => now - Date.parse(`${e.date}T${e.time}:00+07:00`) < maxAge + 7 * DAY).map((e) => e.title.en),
-      ...state.proposed.map((p) => p.title),
-      ...notes.map((e) => e.title.en),
+      ...entries.filter((e) => now - Date.parse(`${e.date}T${e.time}:00+07:00`) < maxAge + 7 * DAY).map(withHeadline),
+      ...state.proposed.filter((p) => !entries.some((e) => e.id === p.id)).map((p) => p.title),
+      ...notes.map(withHeadline),
     ].slice(-80);
     const recentBatch = now - Math.max(...batch.map((c) => c.ms)) < LIMITS.maxAgeHours * HOUR;
     const messages = [
@@ -277,7 +279,12 @@ async function main() {
     try {
       ({ reply, parsed } = await ask(messages));
     } catch (err) {
+      // Quota, overload and an unreadable reply are expected now and then: skip the batch and
+      // leave its headlines for the next run. Anything else (a rejected key, a bug) stops the run.
+      const expected = err instanceof QuotaError || err instanceof OutageError || err instanceof SyntaxError || /JSON|"picks"/.test(err.message);
+      if (!expected) throw err;
       console.warn(`${label}: skipped. ${err.message}`);
+      lastFailure = err;
       failedInARow++;
       if (err instanceof QuotaError || failedInARow >= 2) {
         console.warn("Stopping here; what is done so far is kept, and the rest is judged next time.");
@@ -327,10 +334,12 @@ async function main() {
     if (process.env.GITHUB_STEP_SUMMARY) fs.appendFileSync(process.env.GITHUB_STEP_SUMMARY, md);
   }
   setOutput("new_entries", notes.length);
-  if (plan.length && !succeeded) throw new Error("Every batch failed; see the warnings above.");
+  // Not a failure: the headlines wait (up to LIMITS.maxAgeHours) for a run that can judge them.
+  // The ::warning:: line shows up on the run's page in GitHub Actions.
+  if (plan.length && !succeeded) console.log(`::warning::No batch could be judged this time. ${lastFailure?.message ?? ""}`);
 }
 
 main().catch((err) => {
-  console.error(err instanceof QuotaError ? err.message : err.stack ?? err.message);
+  console.error(err.stack ?? err.message);
   process.exit(1);
 });

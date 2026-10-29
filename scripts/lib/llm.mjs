@@ -3,15 +3,17 @@
 //
 // GEMINI_MODEL is a comma-separated list tried in order. Models get overloaded and retired
 // (gemini-2.5-flash is already closed to new keys), so a busy, timed-out or missing model
-// falls through to the next one instead of failing the run. Flash-Lite comes second: it is
-// quicker and less congested, though a little weaker at judging and writing Thai.
+// falls through to the next one instead of failing the run. Flash-Lite is deliberately left
+// out: in testing it scored too generously and broke the hard rules.
+// The free tier allows 20 requests a day per model.
 
 export class QuotaError extends Error {}
+export class OutageError extends Error {}
 class TryNextModel extends Error {
   constructor(message, { quota = false } = {}) { super(message); this.quota = quota; }
 }
 
-const DEFAULT_MODELS = "gemini-3.5-flash,gemini-3.5-flash-lite,gemini-flash-latest";
+const DEFAULT_MODELS = "gemini-3.5-flash,gemini-flash-latest";
 const API = "https://generativelanguage.googleapis.com/v1beta/models";
 const ATTEMPTS_PER_MODEL = 3;
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
@@ -127,5 +129,5 @@ export async function chat({ messages, schema, maxTokens = 16384, temperature = 
     }
   }
   const summary = failures.map((f) => f.message).join(" ");
-  throw failures.every((f) => f.quota) ? new QuotaError(`Gemini quota exhausted. ${summary}`) : new Error(`No Gemini model answered. ${summary}`);
+  throw failures.every((f) => f.quota) ? new QuotaError(`Gemini quota exhausted. ${summary}`) : new OutageError(`No Gemini model answered. ${summary}`);
 }

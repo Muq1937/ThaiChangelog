@@ -24,6 +24,10 @@ const EN = [
   "smuggl\\w*", "traffick\\w*", "courts?", "judge", "verdict", "jail\\w*", "prison\\w*", "sentenced",
   "lawsuit\\w*", "sued", "accident\\w*", "crash\\w*", "collision", "drown\\w*", "suicide",
   "injur\\w*", "victims?", "missing", "evacuat\\w*", "casualt\\w*",
+  // disasters and safety incidents
+  "landslides?", "flash floods?", "disasters?", "emergency", "stranded",
+  // celebrity gossip ("spotted together" is left to the prompt: leopards get spotted together too)
+  "dating", "rumou?rs?", "affair", "divorc\\w*",
 ];
 
 // Harmless phrases that contain a blocked English word.
@@ -52,6 +56,11 @@ const TH = [
   "คอร์รัปชัน", "สินบน", "พนัน", "ค้ามนุษย์", "ลักลอบ", "ศาลอาญา", "ศาลฎีกา", "ศาลแพ่ง",
   "ศาลปกครอง", "ศาลจังหวัด", "พิพากษา", "ฟ้อง", "ติดคุก", "จำคุก", "เรือนจำ", "อุบัติเหตุ",
   "รถชน", "รถคว่ำ", "จมน้ำ", "ไฟไหม้", "เพลิงไหม้", "บาดเจ็บ", "สูญหาย", "อพยพ",
+  // disasters and safety incidents (ระทึก, "nerve-wracking", heads most incident reports)
+  "ระทึก", "น้ำป่า", "ดินถล่ม", "ดินสไลด์", "อุทกภัย", "ผู้ประสบภัย", "เยียวยา", "น้ำท่วมหนัก",
+  "จมมิด", "จมบาดาล", "ภัยพิบัติ",
+  // celebrity gossip
+  "คบหา", "เลิกรา", "หย่า", "มือที่สาม",
 ];
 
 // Place names that contain a blocked Thai term (สมุทรสงคราม, the Amphawa province, contains สงคราม).
