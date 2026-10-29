@@ -1,0 +1,14 @@
+{
+  "name": "thailand-changelog",
+  "private": true,
+  "description": "Real news from Thailand, written as video-game patch notes, in Thai and English.",
+  "engines": {
+    "node": ">=20.12"
+  },
+  "scripts": {
+    "update": "node scripts/update.mjs",
+    "preview": "node scripts/update.mjs --preview",
+    "dry-run": "node scripts/update.mjs --dry-run",
+    "build": "node scripts/build.mjs"
+  }
+}

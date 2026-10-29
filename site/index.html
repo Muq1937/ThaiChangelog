@@ -1,0 +1,352 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Thailand Changelog</title>
+<meta name="description" content="Real news from Thailand, written as video-game patch notes, in Thai and English. Checked every hour.">
+<meta property="og:title" content="Thailand Changelog">
+<meta property="og:description" content="Real news from Thailand, written as video-game patch notes, in Thai and English.">
+<meta property="og:type" content="website">
+<meta name="theme-color" content="#F5F7F4" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#101411" media="(prefers-color-scheme: dark)">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%23227A37'/%3E%3Cpath d='M13 8H9v16h4M19 8h4v16h-4' fill='none' stroke='white' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E">
+<link rel="alternate" type="application/rss+xml" title="Thailand Changelog (English)" href="feed.xml">
+<link rel="alternate" type="application/rss+xml" title="แพตช์โน้ตประเทศไทย (ภาษาไทย)" href="feed-th.xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans+Thai:wght@400;500;600&display=swap">
+<script>
+  // Apply a saved theme before the first paint.
+  try {
+    var t = localStorage.getItem("thcl.theme");
+    if (t === "light" || t === "dark") document.documentElement.dataset.theme = t;
+  } catch (e) {}
+</script>
+<style>
+/* One quiet column of dated releases; mono metadata beside sans copy. */
+:root{
+  --bg:#F5F7F4; --surface:#FFFFFF; --line:#D6DDD3;
+  --fg:#17201A; --muted:#5B675F; --accent:#227A37; --accent-ink:#FFFFFF;
+  --t-new:#1C5FB0; --t-buff:#227A37; --t-bal:#8F5C00; --t-event:#A8226A; --t-known:#B3341A;
+  --font-body:"IBM Plex Sans Thai","Leelawadee UI",Thonburi,system-ui,sans-serif;
+  --font-mono:"IBM Plex Mono","IBM Plex Sans Thai",ui-monospace,Menlo,Consolas,monospace;
+  color-scheme:light;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#101411; --surface:#161B17; --line:#2A342D;
+    --fg:#E1E8E2; --muted:#909D95; --accent:#5CC872; --accent-ink:#0A1A0E;
+    --t-new:#74AAF2; --t-buff:#5CC872; --t-bal:#E5B04A; --t-event:#F07DB5; --t-known:#F2805F;
+    color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#101411; --surface:#161B17; --line:#2A342D;
+  --fg:#E1E8E2; --muted:#909D95; --accent:#5CC872; --accent-ink:#0A1A0E;
+  --t-new:#74AAF2; --t-buff:#5CC872; --t-bal:#E5B04A; --t-event:#F07DB5; --t-known:#F2805F;
+  color-scheme:dark;
+}
+
+*,*::before,*::after{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{
+  margin:0; background:var(--bg); color:var(--fg);
+  font-family:var(--font-body); font-size:16px; line-height:1.65;
+  padding-top:env(safe-area-inset-top,0px);
+  padding-left:max(16px,env(safe-area-inset-left,0px));
+  padding-right:max(16px,env(safe-area-inset-right,0px));
+  padding-bottom:calc(48px + env(safe-area-inset-bottom,0px));
+  -webkit-font-smoothing:antialiased;
+}
+html[lang="th"] body{line-height:1.75}
+h1,h2,h3,p{margin:0}
+h1,h2,h3{line-height:1.25; text-wrap:balance}
+ol{margin:0; padding:0; list-style:none}
+button{font:inherit; color:inherit; background:none; border:0; padding:0; cursor:pointer}
+a{color:inherit}
+:focus-visible{outline:2px solid var(--accent); outline-offset:2px}
+.tnum{font-variant-numeric:tabular-nums}
+
+.tag-new{--tag:var(--t-new)}
+.tag-buff{--tag:var(--t-buff)}
+.tag-balance{--tag:var(--t-bal)}
+.tag-event{--tag:var(--t-event)}
+.tag-known{--tag:var(--t-known)}
+
+.cl{max-width:760px; margin-inline:auto; padding-top:36px}
+.cl-top{display:flex; flex-wrap:wrap; align-items:flex-start; justify-content:space-between; gap:16px; padding-bottom:22px; border-bottom:1px solid var(--line)}
+.cl-top > div{flex:1 1 320px; min-width:0}
+.cl-path{font-family:var(--font-mono); font-size:13px; color:var(--muted)}
+.cl-path b{font-weight:500; color:var(--accent)}
+.cl-top h1{margin-top:8px; font-size:clamp(30px,5vw,44px); font-weight:600; letter-spacing:-.01em}
+html[lang="th"] .cl-top h1{letter-spacing:0}
+.cl-sub{margin-top:8px; max-width:54ch; color:var(--muted)}
+.cl-status{display:flex; align-items:center; gap:8px; margin-top:14px; font-family:var(--font-mono); font-size:12.5px; color:var(--muted)}
+.cl-pulse{flex:none; width:8px; height:8px; border-radius:50%; background:var(--accent); animation:cl-pulse 2.4s ease-in-out infinite}
+@keyframes cl-pulse{50%{box-shadow:0 0 0 5px color-mix(in srgb,var(--accent) 22%,transparent)}}
+
+.controls{display:flex; align-items:center; gap:8px; flex-shrink:0}
+.seg{display:inline-flex; gap:2px; padding:3px; border:1px solid var(--line); border-radius:8px; background:var(--surface)}
+.seg button{min-width:44px; padding:4px 10px; border-radius:6px; font-size:13px; font-weight:600; line-height:1.5; color:var(--muted)}
+.seg button:hover{color:var(--fg)}
+.seg button[aria-pressed="true"]{background:var(--accent); color:var(--accent-ink)}
+.theme-btn{width:38px; height:38px; display:grid; place-items:center; border:1px solid var(--line); border-radius:8px; background:var(--surface); color:var(--fg)}
+.theme-btn:hover{color:var(--accent)}
+.theme-btn svg{width:18px; height:18px}
+
+.cl-filters{display:flex; flex-wrap:wrap; gap:6px; padding-block:16px; border-bottom:1px solid var(--line)}
+.cl-filter{
+  display:inline-flex; align-items:center; gap:6px; padding:3px 11px;
+  border:1px solid var(--line); border-radius:999px; background:var(--surface);
+  font-family:var(--font-mono); font-size:12.5px; color:var(--tag,var(--fg));
+}
+.cl-filter span{color:var(--muted)}
+.cl-filter:hover{border-color:var(--tag,var(--fg))}
+.cl-filter[aria-pressed="true"]{background:var(--fg); border-color:var(--fg); color:var(--bg)}
+.cl-filter[aria-pressed="true"] span{color:inherit; opacity:.7}
+
+.cl-release{padding-block:26px 10px; border-bottom:1px solid var(--line)}
+.cl-rel-h{display:flex; flex-wrap:wrap; align-items:baseline; gap:4px 12px; margin-bottom:8px}
+.cl-rel-h h2{font-family:var(--font-mono); font-size:20px; font-weight:500; color:var(--accent)}
+.cl-date{font-weight:600}
+.cl-count{margin-left:auto; font-family:var(--font-mono); font-size:12.5px; color:var(--muted)}
+.cl-item{display:grid; grid-template-columns:3.4rem minmax(0,1fr); gap:14px; padding-block:14px}
+.cl-item + .cl-item{border-top:1px dashed var(--line)}
+.cl-item time{padding-top:2px; font-family:var(--font-mono); font-size:13px; color:var(--muted)}
+.cl-tag{font-family:var(--font-mono); font-size:12.5px; font-weight:500; color:var(--tag)}
+.cl-item h3{margin-top:2px; font-size:17px; font-weight:600}
+.cl-text{margin-top:4px; overflow-wrap:anywhere}
+.cl-src{display:inline-block; margin-top:6px; font-family:var(--font-mono); font-size:12.5px; color:var(--accent); text-decoration:underline; text-decoration-thickness:1px; text-underline-offset:3px}
+.cl-src:hover{text-decoration-thickness:2px}
+
+.cl-note{padding-block:32px; color:var(--muted)}
+.cl-more{margin-top:20px; padding:8px 16px; border:1px solid var(--line); border-radius:8px; background:var(--surface); font-family:var(--font-mono); font-size:13px}
+.cl-more:hover{border-color:var(--accent); color:var(--accent)}
+
+.cl-foot{margin-top:40px; padding-top:20px; border-top:1px solid var(--line); display:grid; gap:8px; font-size:13.5px; color:var(--muted)}
+.cl-foot p{max-width:64ch}
+.cl-links{display:flex; flex-wrap:wrap; gap:4px 16px; font-family:var(--font-mono); font-size:12.5px}
+
+@media (prefers-reduced-motion:reduce){ .cl-pulse{animation:none} }
+</style>
+</head>
+<body>
+<main id="app" class="cl">
+  <p class="cl-path">thailand-changelog / <b>CHANGELOG</b></p>
+  <noscript><p class="cl-note">This page needs JavaScript to load the patch notes. The <a href="feed.xml">RSS feed</a> works without it.</p></noscript>
+</main>
+
+<script>
+(() => {
+  const root = document.documentElement;
+  const app = document.getElementById("app");
+  const TAG_ORDER = ["new", "buff", "balance", "event", "known"];
+  const DAYS_PER_PAGE = 10;
+  const REPO = "https://github.com/Muq1937/ThaiChangelog";
+
+  const store = {
+    get(k) { try { return localStorage.getItem("thcl." + k); } catch (e) { return null; } },
+    set(k, v) { try { localStorage.setItem("thcl." + k, v); } catch (e) { /* storage blocked */ } }
+  };
+
+  const S = {
+    en: {
+      name: "Thailand Changelog",
+      tagline: "Real news from Thailand, written as video-game patch notes.",
+      status: "Checks Thai news every hour · times in UTC+7",
+      changes: n => n === 1 ? "1 change" : n + " changes",
+      all: "All",
+      filterLabel: "Filter by tag",
+      loading: "Loading patch notes…",
+      error: "Couldn't load the patch notes. Refresh the page to try again.",
+      empty: "No patches yet. The first stories arrive after the next hourly check.",
+      emptyFilter: "No entries with this tag yet.",
+      more: "Show older patches",
+      original: "Original headline",
+      toDark: "Switch to dark mode",
+      toLight: "Switch to light mode",
+      lang: "Language",
+      about: "Stories are picked from Thai news sites and rewritten by an AI model (Google Gemini). Every entry links to the original report. This site is not affiliated with any of the sources.",
+      rssEn: "RSS (English)",
+      rssTh: "RSS (ภาษาไทย)",
+      code: "Source code"
+    },
+    th: {
+      name: "แพตช์โน้ตประเทศไทย",
+      tagline: "ข่าวจริงจากเมืองไทย เล่าใหม่ในสไตล์แพตช์โน้ตเกม",
+      status: "ตรวจข่าวไทยทุกชั่วโมง · เวลาประเทศไทย (UTC+7)",
+      changes: n => n + " รายการ",
+      all: "ทั้งหมด",
+      filterLabel: "กรองตามประเภท",
+      loading: "กำลังโหลดแพตช์โน้ต…",
+      error: "โหลดแพตช์โน้ตไม่สำเร็จ ลองรีเฟรชหน้านี้อีกครั้ง",
+      empty: "ยังไม่มีแพตช์ เรื่องแรกจะมาหลังการตรวจข่าวรอบถัดไป",
+      emptyFilter: "ยังไม่มีรายการในประเภทนี้",
+      more: "ดูแพตช์ก่อนหน้า",
+      original: "พาดหัวต้นฉบับ",
+      toDark: "เปลี่ยนเป็นโหมดมืด",
+      toLight: "เปลี่ยนเป็นโหมดสว่าง",
+      lang: "ภาษา",
+      about: "เรื่องราวคัดมาจากเว็บข่าวไทยและเรียบเรียงใหม่โดยโมเดล AI (Google Gemini) ทุกรายการมีลิงก์ไปยังข่าวต้นฉบับ เว็บไซต์นี้ไม่ได้เกี่ยวข้องกับแหล่งข่าวใด ๆ",
+      rssEn: "RSS (English)",
+      rssTh: "RSS (ภาษาไทย)",
+      code: "ซอร์สโค้ด"
+    }
+  };
+
+  const TAG = {
+    en: { new: "NEW", buff: "BUFF", balance: "BALANCE", event: "EVENT", known: "KNOWN ISSUE" },
+    th: { new: "ใหม่", buff: "บัฟ", balance: "ปรับสมดุล", event: "อีเวนต์", known: "ปัญหาที่ทราบ" }
+  };
+
+  const ICON = {
+    moon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 14.5A8 8 0 0 1 9.5 4a8 8 0 1 0 10.5 10.5Z"/></svg>',
+    sun: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg>'
+  };
+
+  const esc = s => String(s ?? "").replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+  const safeUrl = u => /^https?:\/\//i.test(u || "") ? u : null;
+
+  const savedLang = store.get("lang");
+  const state = {
+    lang: savedLang === "th" || savedLang === "en" ? savedLang : ((navigator.language || "").toLowerCase().startsWith("th") ? "th" : "en"),
+    filter: "all",
+    pages: 1,
+    status: "loading",
+    entries: []
+  };
+
+  const darkMQ = matchMedia("(prefers-color-scheme: dark)");
+  const isDark = () => root.dataset.theme ? root.dataset.theme === "dark" : darkMQ.matches;
+
+  // Thai dates use the Buddhist Era: 2026 shows as 2569.
+  const LOCALE = { en: "en-GB", th: "th-TH" };
+  const longDate = iso => new Intl.DateTimeFormat(LOCALE[state.lang], {
+    timeZone: "Asia/Bangkok", weekday: "short", day: "numeric", month: "short", year: "numeric"
+  }).format(new Date(iso + "T12:00:00+07:00"));
+  const ver = iso => iso.slice(2).replace(/-/g, ".");
+
+  function controls() {
+    const s = S[state.lang], dark = isDark(), label = dark ? s.toLight : s.toDark;
+    return `<div class="controls">
+      <div class="seg" role="group" aria-label="${s.lang}">
+        <button type="button" data-lang="th" lang="th" aria-pressed="${state.lang === "th"}">ไทย</button>
+        <button type="button" data-lang="en" lang="en" aria-pressed="${state.lang === "en"}">EN</button>
+      </div>
+      <button type="button" class="theme-btn" data-theme-toggle aria-label="${label}" title="${label}">${dark ? ICON.sun : ICON.moon}</button>
+    </div>`;
+  }
+
+  function item(e) {
+    const s = S[state.lang], L = state.lang;
+    const url = safeUrl(e.source && e.source.url);
+    const srcName = (e.source && e.source.name && (e.source.name[L] || e.source.name.en)) || "";
+    const tip = e.source && e.source.headline ? ` title="${esc(s.original + ": " + e.source.headline)}"` : "";
+    return `<li class="cl-item tag-${esc(e.tag)}">
+      <time class="tnum">${esc(e.time)}</time>
+      <div>
+        <p class="cl-tag">[${TAG[L][e.tag] || esc(e.tag)}]</p>
+        <h3>${esc(e.title[L])}</h3>
+        <p class="cl-text">${esc(e.body[L])}</p>
+        ${url ? `<a class="cl-src" href="${esc(url)}" target="_blank" rel="noopener"${tip}>→ ${esc(srcName)}</a>` : ""}
+      </div>
+    </li>`;
+  }
+
+  function releases() {
+    const s = S[state.lang];
+    if (state.status === "loading") return `<p class="cl-note">${s.loading}</p>`;
+    if (state.status === "error") return `<p class="cl-note">${s.error}</p>`;
+    if (!state.entries.length) return `<p class="cl-note">${s.empty}</p>`;
+    const visible = state.entries.filter(e => state.filter === "all" || e.tag === state.filter);
+    if (!visible.length) return `<p class="cl-note">${s.emptyFilter}</p>`;
+    const days = [...new Set(visible.map(e => e.date))];
+    const shown = days.slice(0, state.pages * DAYS_PER_PAGE);
+    return shown.map(d => {
+      const items = visible.filter(e => e.date === d);
+      return `<section class="cl-release">
+        <div class="cl-rel-h"><h2 class="tnum">v${ver(d)}</h2><span class="cl-date">${longDate(d)}</span><span class="cl-count">${s.changes(items.length)}</span></div>
+        <ol>${items.map(item).join("")}</ol>
+      </section>`;
+    }).join("") + (days.length > shown.length ? `<button type="button" class="cl-more" data-more>${s.more}</button>` : "");
+  }
+
+  function filters() {
+    if (state.status !== "ready" || !state.entries.length) return "";
+    const s = S[state.lang], t = TAG[state.lang];
+    const count = k => state.entries.filter(e => k === "all" || e.tag === k).length;
+    return `<div class="cl-filters" role="group" aria-label="${s.filterLabel}">${["all", ...TAG_ORDER].map(k => `
+      <button type="button" class="cl-filter${k === "all" ? "" : " tag-" + k}" data-filter="${k}" aria-pressed="${state.filter === k}">${k === "all" ? s.all : t[k]}<span class="tnum">${count(k)}</span></button>`).join("")}
+    </div>`;
+  }
+
+  function render(focusSel) {
+    const s = S[state.lang];
+    root.lang = state.lang;
+    document.title = s.name;
+    app.innerHTML = `
+      <header class="cl-top">
+        <div>
+          <p class="cl-path">thailand-changelog / <b>CHANGELOG</b></p>
+          <h1>${s.name}</h1>
+          <p class="cl-sub">${s.tagline}</p>
+          <p class="cl-status"><span class="cl-pulse"></span>${s.status}</p>
+        </div>
+        ${controls()}
+      </header>
+      ${filters()}
+      ${releases()}
+      <footer class="cl-foot">
+        <p>${s.about}</p>
+        <p class="cl-links"><a href="feed.xml">${s.rssEn}</a><a href="feed-th.xml">${s.rssTh}</a><a href="${REPO}" target="_blank" rel="noopener">${s.code}</a></p>
+      </footer>`;
+    if (focusSel) { const el = app.querySelector(focusSel); if (el) el.focus(); }
+  }
+
+  function syncThemeButton() {
+    const b = app.querySelector(".theme-btn");
+    if (!b) return;
+    const s = S[state.lang], dark = isDark(), label = dark ? s.toLight : s.toDark;
+    b.innerHTML = dark ? ICON.sun : ICON.moon;
+    b.setAttribute("aria-label", label);
+    b.title = label;
+  }
+
+  app.addEventListener("click", e => {
+    const b = e.target.closest("button");
+    if (!b) return;
+    const d = b.dataset;
+    if (d.lang) {
+      state.lang = d.lang;
+      store.set("lang", d.lang);
+      render(`[data-lang="${d.lang}"]`);
+    } else if ("themeToggle" in d) {
+      const next = isDark() ? "light" : "dark";
+      root.dataset.theme = next;
+      store.set("theme", next);
+      syncThemeButton();
+    } else if (d.filter) {
+      state.filter = d.filter;
+      state.pages = 1;
+      render(`[data-filter="${d.filter}"]`);
+    } else if ("more" in d) {
+      state.pages++;
+      render();
+    }
+  });
+  darkMQ.addEventListener("change", syncThemeButton);
+
+  render();
+  fetch("entries.json", { cache: "no-cache" })
+    .then(r => { if (!r.ok) throw new Error("HTTP " + r.status); return r.json(); })
+    .then(data => {
+      state.entries = (data.entries || []).filter(e => e && e.title && e.body && TAG.en[e.tag]);
+      state.status = "ready";
+      render();
+    })
+    .catch(() => { state.status = "error"; render(); });
+})();
+</script>
+</body>
+</html>

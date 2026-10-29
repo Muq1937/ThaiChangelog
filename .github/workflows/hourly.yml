@@ -1,0 +1,86 @@
+name: Hourly news check
+
+on:
+  schedule:
+    - cron: "17 * * * *" # every hour at :17; GitHub delays runs scheduled on the hour
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  pull-requests: write
+  pages: write
+  id-token: write
+
+concurrency:
+  group: hourly-news
+  cancel-in-progress: false
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    outputs:
+      published: ${{ steps.publish.outputs.published }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      # Which links were already judged lives in the Actions cache, so git history stays clean.
+      - name: Restore pipeline memory
+        uses: actions/cache/restore@v4
+        with:
+          path: .state
+          key: state-${{ github.run_id }}-${{ github.run_attempt }}
+          restore-keys: state-
+
+      - name: Find and write stories
+        id: update
+        env:
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+          GEMINI_MODEL: ${{ vars.GEMINI_MODEL }} # optional comma-separated fallback list; see scripts/lib/llm.mjs
+          SUMMARY_FILE: ${{ runner.temp }}/summary.md
+        run: node scripts/update.mjs
+
+      - name: Save pipeline memory
+        uses: actions/cache/save@v4
+        with:
+          path: .state
+          key: state-${{ github.run_id }}-${{ github.run_attempt }}
+
+      # PUBLISH_MODE=review (default) opens a pull request per batch; merging it publishes.
+      # PUBLISH_MODE=auto commits straight to main.
+      - name: Publish, or open a pull request for review
+        id: publish
+        if: fromJSON(steps.update.outputs.new_entries || '0') > 0
+        env:
+          GH_TOKEN: ${{ github.token }}
+          MODE: ${{ vars.PUBLISH_MODE || 'review' }}
+          SUMMARY_FILE: ${{ runner.temp }}/summary.md
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          stamp=$(TZ=Asia/Bangkok date +%Y-%m-%d-%H%M)
+          if [ "$MODE" = "auto" ]; then
+            git add data/entries
+            git commit -m "Add stories from the $stamp check"
+            git pull --rebase origin main
+            git push origin HEAD:main
+            echo "published=true" >> "$GITHUB_OUTPUT"
+          else
+            branch="stories/$stamp"
+            git switch -c "$branch"
+            git add data/entries
+            git commit -m "Stories for review from the $stamp check"
+            git push origin "$branch"
+            gh pr create --base main --head "$branch" --title "New stories $stamp" --body-file "$SUMMARY_FILE"
+          fi
+
+  # Pushes made with the workflow's own token do not trigger other workflows, so auto mode
+  # deploys from here. Merged review pull requests deploy through deploy.yml's push trigger.
+  deploy:
+    needs: update
+    if: needs.update.outputs.published == 'true'
+    uses: ./.github/workflows/deploy.yml
