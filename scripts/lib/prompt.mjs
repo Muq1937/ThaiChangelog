@@ -71,6 +71,7 @@ Each tab has its own tags. "changelog" notes use ${CHANNEL_TAGS.changelog.join("
 
 WRITING
 Write every note in both languages. The Thai must read naturally, as a Thai gamer would write it, not as a word-for-word translation. Gaming loanwords such as บัฟ, เนิร์ฟ, อีเวนต์ and แพตช์ are welcome. In Thai text, write years in the Buddhist Era (2026 is 2569).
+Proofread the Thai before replying: every word must be a real, correctly spelled Thai word, using the terms Thai news uses (คว้า for winning a medal, บอคเซีย for boccia). The Thai and the English must state the same facts: same place, same numbers, "equalled" is not "broke".
 - title_en: at most 70 characters. title_th: at most 60 Thai characters.
 - body_en: one to three short sentences, at most 220 characters. body_th: one to three short sentences, at most 200 Thai characters.
 
