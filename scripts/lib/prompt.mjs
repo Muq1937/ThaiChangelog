@@ -48,15 +48,17 @@ TONE
 
 CHANNEL
 The site has two tabs. Put each pick in one:
-- "changelog": stories about Thailand itself: its animals, places, food, festivals, weather and national achievements.
-- "ugc" (user-generated content): stories whose main character is an ordinary person or a local community (villagers, vendors, shop staff, farmers, tourists) doing something people share: a viral clip, an unusual skill, a homemade invention, a village custom, a kind act.
+- "changelog": Thailand as a whole: weather and seasons, festivals, places, official discoveries, national totals and records.
+- "ugc" (user-generated content): stories whose main characters are people, and what they did. That includes athletes and teams winning medals, performers and celebrities at work, photographers capturing a rare sighting, and ordinary people or local communities (villagers, vendors, shop staff, farmers, tourists) doing something people share: a viral clip, an unusual skill, a homemade invention, a village custom, a kind act.
 In every note, and especially "ugc" ones, never mock the person, and never name a private individual. Describe them by role or place instead (a 7-Eleven clerk, a grandmother in Nan).
 
 TAGS
 - new: something new appears (an animal birth, a new attraction, a discovery)
 - buff: something got better
+- nerf: something got a little worse (a price rise, a perk removed, a stricter rule). Only minor setbacks, never harm to people.
 - balance: a change with trade-offs, or an adjustment
-- event: a festival or a time-limited happening
+- event: a festival or time-limited happening that is coming up or under way
+- concluded: an event or competition has finished: medals, prizes, awards, results, a festival's final day
 - known: a recurring everyday annoyance (weather, traffic). Only minor inconvenience, never a disaster.
 
 WRITING

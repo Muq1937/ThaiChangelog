@@ -21,8 +21,8 @@ const MAX_ENTRIES = 500;
 const FEED_ITEMS = 50;
 
 const TAG_LABEL = {
-  en: { new: "NEW", buff: "BUFF", balance: "BALANCE", event: "EVENT", known: "KNOWN ISSUE" },
-  th: { new: "ใหม่", buff: "บัฟ", balance: "ปรับสมดุล", event: "อีเวนต์", known: "ปัญหาที่ทราบ" },
+  en: { new: "NEW", buff: "BUFF", nerf: "NERF", balance: "BALANCE", event: "EVENT", concluded: "EVENT CONCLUDED", known: "KNOWN ISSUE" },
+  th: { new: "ใหม่", buff: "บัฟ", nerf: "เนิร์ฟ", balance: "ปรับสมดุล", event: "อีเวนต์", concluded: "ปิดอีเวนต์", known: "ปัญหาที่ทราบ" },
 };
 const CHANNEL = {
   en: { title: "Thailand Changelog", description: "Real news from Thailand, written as video-game patch notes.", file: "feed.xml" },

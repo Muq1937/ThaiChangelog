@@ -33,7 +33,7 @@ const DAY = 24 * HOUR;
 const THAI = /[฀-๿]/;
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
 
-const TAG_LABEL = { new: "NEW", buff: "BUFF", balance: "BALANCE", event: "EVENT", known: "KNOWN ISSUE" };
+const TAG_LABEL = { new: "NEW", buff: "BUFF", nerf: "NERF", balance: "BALANCE", event: "EVENT", concluded: "EVENT CONCLUDED", known: "KNOWN ISSUE" };
 
 function bangkok(ms) {
   const parts = new Intl.DateTimeFormat("en-CA", {

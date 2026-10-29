@@ -31,8 +31,8 @@ export const LIMITS = {
   seenDays: 21,        // how long a link is remembered so it is not judged twice
 };
 
-export const TAGS = ["new", "buff", "balance", "event", "known"];
+export const TAGS = ["new", "buff", "nerf", "balance", "event", "concluded", "known"];
 export const PILLARS = ["animals", "food", "festivals", "weather", "wins"];
-// Site tabs: "changelog" is Thailand itself; "ugc" (user-generated content) is ordinary
-// people and local communities doing something the country shares.
+// Site tabs: "changelog" is Thailand as a whole; "ugc" (user-generated content) is stories
+// whose main characters are people: athletes, performers, photographers, villagers.
 export const CHANNELS = ["changelog", "ugc"];

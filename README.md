@@ -26,7 +26,9 @@ The list of links already judged is kept in the Actions cache (`.state/`), not i
 
 **Tone:** dry, short and affectionate. Laughing with Thailand, never at it.
 
-**Two tabs:** *Changelog* is Thailand itself: animals, places, festivals, weather, national wins. *UGC* (user-generated content) is ordinary people and local communities doing something the country shares, such as villagers, vendors and viral clips. Gemini picks the tab for each story (the `channel` field). Notes never name private individuals or make fun of them.
+**Two tabs:** *Changelog* is Thailand as a whole: weather and seasons, festivals, places, official discoveries, national totals. *UGC* (user-generated content) is stories whose main characters are people: athletes winning medals, performers, photographers catching a rare sighting, villagers, vendors and viral clips. Gemini picks the tab for each story (the `channel` field). Notes never name private individuals or make fun of them.
+
+**Tags:** NEW, BUFF, NERF, BALANCE, EVENT, EVENT CONCLUDED (medals, prizes, results, a festival's last day) and KNOWN ISSUE (everyday weather and traffic).
 
 **The bar:** a story needs real public attention. The benchmark is Moo Deng. Each run's log (Actions → News check → a run → "Find and write stories") lists what Gemini considered and the score it gave, so near-misses are visible. To publish more or less, change `minAttention` in [`scripts/config.mjs`](scripts/config.mjs).
 
