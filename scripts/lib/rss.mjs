@@ -51,14 +51,37 @@ function dateOf(block) {
   return null;
 }
 
-/** Fetches one feed and returns its items as { title, link, summary, published, feed }. */
-export async function fetchFeed(feed) {
-  const res = await fetch(feed.url, {
+async function getXml(url) {
+  const res = await fetch(url, {
     headers: { "User-Agent": USER_AGENT, Accept: "application/rss+xml, application/atom+xml, application/xml;q=0.9, */*;q=0.5" },
     signal: AbortSignal.timeout(20_000),
   });
   if (!res.ok) throw new Error(`HTTP ${res.status}`);
-  const xml = await res.text();
+  return res.text();
+}
+
+/** Google Trends RSS: [{ term, traffic, published, news: [{ title, url, source }] }]. */
+export async function fetchTrends(url) {
+  const xml = await getXml(url);
+  return (xml.match(/<item\b[\s\S]*?<\/item>/gi) ?? [])
+    .map((b) => ({
+      term: plain(inner(b, "title")),
+      traffic: plain(inner(b, "ht:approx_traffic")),
+      published: dateOf(b),
+      news: (b.match(/<ht:news_item>[\s\S]*?<\/ht:news_item>/gi) ?? [])
+        .map((n) => ({
+          title: plain(inner(n, "ht:news_item_title")),
+          url: plain(inner(n, "ht:news_item_url")),
+          source: plain(inner(n, "ht:news_item_source")),
+        }))
+        .filter((n) => n.title && /^https?:\/\//i.test(n.url)),
+    }))
+    .filter((t) => t.term);
+}
+
+/** Fetches one feed and returns its items as { title, link, summary, published, feed }. */
+export async function fetchFeed(feed) {
+  const xml = await getXml(feed.url);
   const blocks = xml.match(/<item\b[\s\S]*?<\/item>|<entry\b[\s\S]*?<\/entry>/gi) ?? [];
   return blocks
     .map((b) => ({

@@ -16,12 +16,20 @@ export const FEEDS = [
   { url: "https://rssfeeds.sanook.com/rss/feeds/sanook/travel.index.xml", lang: "th", name: { en: "Sanook", th: "สนุก" } },
 ];
 
+// What people in Thailand are searching for right now, with related news articles.
+// Used as an attention signal and as an extra source of candidates.
+export const TRENDS_URL = "https://trends.google.com/trending/rss?geo=TH";
+
 export const LIMITS = {
-  maxAgeHours: 36,    // skip stories older than this
-  maxCandidates: 40,  // headlines sent to the model per run
-  maxPerRun: 2,       // patch notes written per run
-  maxPerDay: 12,      // patch notes per Bangkok calendar day, published or awaiting review
-  seenDays: 14,       // how long a link is remembered so it is not judged twice
+  minAttention: 8,     // public-attention score (1-10) a story needs before it is published
+  maxPerRun: 2,        // ceilings, not targets: most runs publish nothing
+  maxPerDay: 6,
+  maxAgeHours: 36,     // skip stories older than this
+  maxCandidates: 40,   // new headlines sent to the model per run
+  maxTrending: 10,     // of those, how many may come from Google Trends (sent first)
+  contextHours: 48,    // earlier headlines shown as context, to judge how widely a story is covered
+  contextLines: 150,
+  seenDays: 14,        // how long a link is remembered so it is not judged twice
 };
 
 export const TAGS = ["new", "buff", "balance", "event", "known"];

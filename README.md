@@ -8,11 +8,11 @@ Site: https://muq1937.github.io/ThaiChangelog/ · RSS: [`feed.xml`](https://muq1
 
 Every hour GitHub Actions runs [`scripts/update.mjs`](scripts/update.mjs) ([`hourly.yml`](.github/workflows/hourly.yml)):
 
-1. Read the RSS feeds listed in [`scripts/config.mjs`](scripts/config.mjs) (English: Thaiger, Khaosod English; Thai: Khaosod, Matichon, Sanook).
+1. Read the RSS feeds listed in [`scripts/config.mjs`](scripts/config.mjs) (English: Thaiger, Khaosod English; Thai: Khaosod, Matichon, Sanook), plus [Google Trends for Thailand](https://trends.google.com/trending?geo=TH): what people are searching for right now, with linked articles.
 2. Drop links already judged, and stories older than 36 hours.
 3. Drop every hard-no topic with a keyword list in Thai and English ([`scripts/lib/blocklist.mjs`](scripts/lib/blocklist.mjs)), before the model sees anything.
-4. Send up to 40 headlines to Google Gemini, which picks at most 2 that fit the content pillars and writes each one in English and Thai ([`scripts/lib/prompt.mjs`](scripts/lib/prompt.mjs)).
-5. Check the reply in code: tags, lengths, language, and the blocklist again. Save each story as its own file in `data/entries/`.
+4. Send up to 40 new headlines to Google Gemini, with the trending searches and the last two days of headlines as context ([`scripts/lib/prompt.mjs`](scripts/lib/prompt.mjs)). Gemini scores the best few for **public attention** (1-10): is it trending, covered by several outlets, called viral, the kind of thing people forward? Only stories scoring **8 or more** get written up, in English and Thai. Most hours nothing qualifies, and nothing is published.
+5. Check the reply in code: the attention score, tags, lengths, language, and the blocklist again. Save each story as its own file in `data/entries/`.
 6. **Review mode** (default): open a pull request. Merging it publishes. **Auto mode**: commit straight to `main`.
 7. [`scripts/build.mjs`](scripts/build.mjs) turns the entries into the site ([`site/index.html`](site/index.html)), `entries.json` and the two RSS feeds, and [`deploy.yml`](.github/workflows/deploy.yml) publishes them to GitHub Pages.
 
@@ -25,6 +25,8 @@ The list of links already judged is kept in the Actions cache (`.state/`), not i
 **Hard no's:** the monarchy (Thailand's lèse-majesté law), politics, crime, scams, and tragedy. These are blocked in code, in the prompt, and (in review mode) by a person. Over-blocking is acceptable. Never loosen the monarchy list.
 
 **Tone:** dry, short and affectionate. Laughing with Thailand, never at it.
+
+**The bar:** a story needs real public attention. The benchmark is Moo Deng. Each run's log (Actions → Hourly news check → a run → "Find and write stories") lists what Gemini considered and the score it gave, so near-misses are visible. To publish more or less, change `minAttention` in [`scripts/config.mjs`](scripts/config.mjs). `maxPerRun` (2) and `maxPerDay` (6) are only safety caps.
 
 ## Setup
 
