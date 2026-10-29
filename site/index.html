@@ -71,7 +71,7 @@ a{color:inherit}
 .tag-new{--tag:var(--t-new)}
 .tag-buff{--tag:var(--t-buff)}
 .tag-nerf{--tag:var(--t-nerf)}
-.tag-balance{--tag:var(--t-bal)}
+.tag-rebalance{--tag:var(--t-bal)}
 .tag-event{--tag:var(--t-event)}
 .tag-concluded{--tag:var(--t-done)}
 .tag-known{--tag:var(--t-known)}
@@ -154,7 +154,7 @@ html[lang="th"] .cl-top h1{letter-spacing:0}
 (() => {
   const root = document.documentElement;
   const app = document.getElementById("app");
-  const TAG_ORDER = ["new", "buff", "nerf", "balance", "event", "concluded", "known"];
+  const TAG_ORDER = ["new", "buff", "nerf", "rebalance", "event", "concluded", "known"];
   const DAYS_PER_PAGE = 10;
   const REPO = "https://github.com/Muq1937/ThaiChangelog";
 
@@ -217,8 +217,8 @@ html[lang="th"] .cl-top h1{letter-spacing:0}
   };
 
   const TAG = {
-    en: { new: "NEW", buff: "BUFF", nerf: "NERF", balance: "BALANCE", event: "EVENT", concluded: "EVENT CONCLUDED", known: "KNOWN ISSUE" },
-    th: { new: "ใหม่", buff: "บัฟ", nerf: "เนิร์ฟ", balance: "ปรับสมดุล", event: "อีเวนต์", concluded: "ปิดอีเวนต์", known: "ปัญหาที่ทราบ" }
+    en: { new: "NEW", buff: "BUFF", nerf: "NERF", rebalance: "REBALANCE", event: "EVENT", concluded: "EVENT CONCLUDED", known: "KNOWN ISSUE" },
+    th: { new: "ใหม่", buff: "บัฟ", nerf: "เนิร์ฟ", rebalance: "ปรับบาลานซ์", event: "อีเวนต์", concluded: "ปิดอีเวนต์", known: "ปัญหาที่ทราบ" }
   };
 
   const ICON = {

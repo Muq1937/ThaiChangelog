@@ -9,9 +9,11 @@ export const USER_AGENT = "ThailandChangelog/0.1 (+https://github.com/Muq1937/Th
 export const FEEDS = [
   { url: "https://thethaiger.com/news/feed", lang: "en", paged: true, name: { en: "Thaiger", th: "Thaiger" } },
   { url: "https://thethaiger.com/travel/feed", lang: "en", paged: true, name: { en: "Thaiger", th: "Thaiger" } },
+  { url: "https://thethaiger.com/news/business/feed", lang: "en", paged: true, name: { en: "Thaiger", th: "Thaiger" } },
   { url: "https://www.khaosodenglish.com/feed/", lang: "en", paged: true, name: { en: "Khaosod English", th: "Khaosod English" } },
   { url: "https://www.khaosod.co.th/around-thailand/feed", lang: "th", name: { en: "Khaosod", th: "ข่าวสด" } },
   { url: "https://www.khaosod.co.th/lifestyle/feed", lang: "th", name: { en: "Khaosod", th: "ข่าวสด" } },
+  { url: "https://www.khaosod.co.th/economics/feed", lang: "th", name: { en: "Khaosod", th: "ข่าวสด" } },
   { url: "https://www.matichon.co.th/region/feed", lang: "th", paged: true, name: { en: "Matichon", th: "มติชน" } },
   { url: "https://rssfeeds.sanook.com/rss/feeds/sanook/news.index.xml", lang: "th", name: { en: "Sanook", th: "สนุก" } },
   { url: "https://rssfeeds.sanook.com/rss/feeds/sanook/travel.index.xml", lang: "th", name: { en: "Sanook", th: "สนุก" } },
@@ -31,8 +33,9 @@ export const LIMITS = {
   seenDays: 21,        // how long a link is remembered so it is not judged twice
 };
 
-export const TAGS = ["new", "buff", "nerf", "balance", "event", "concluded", "known"];
-export const PILLARS = ["animals", "food", "festivals", "weather", "wins"];
-// Site tabs: "changelog" is Thailand as a whole; "ugc" (user-generated content) is stories
-// whose main characters are people: athletes, performers, photographers, villagers.
+export const TAGS = ["new", "buff", "nerf", "rebalance", "event", "concluded", "known"];
+export const PILLARS = ["rules", "animals", "food", "festivals", "weather", "wins"];
+// Site tabs: "changelog" is real changes to how Thailand works (tariffs, prices, rules, visas,
+// transport, public services, official season changes); "ugc" (user-generated content) is what
+// people did, found, won or celebrated.
 export const CHANNELS = ["changelog", "ugc"];

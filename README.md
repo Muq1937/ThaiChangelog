@@ -8,7 +8,7 @@ Site: https://muq1937.github.io/ThaiChangelog/ · RSS: [`feed.xml`](https://muq1
 
 Every two hours GitHub Actions runs [`scripts/update.mjs`](scripts/update.mjs) ([`news-check.yml`](.github/workflows/news-check.yml)). That's 12 runs a day, usually one Gemini request each, which keeps within the free tier's 20 requests per model per day:
 
-1. Read the RSS feeds listed in [`scripts/config.mjs`](scripts/config.mjs) (English: Thaiger, Khaosod English; Thai: Khaosod, Matichon, Sanook), plus [Google Trends for Thailand](https://trends.google.com/trending?geo=TH): what people are searching for right now, with linked articles.
+1. Read the RSS feeds listed in [`scripts/config.mjs`](scripts/config.mjs) (English: Thaiger, including its business section, and Khaosod English; Thai: Khaosod, including its economics section, Matichon and Sanook), plus [Google Trends for Thailand](https://trends.google.com/trending?geo=TH): what people are searching for right now, with linked articles.
 2. Drop links already judged, and stories older than 36 hours.
 3. Drop every hard-no topic with a keyword list in Thai and English ([`scripts/lib/blocklist.mjs`](scripts/lib/blocklist.mjs)), before the model sees anything.
 4. Send the new headlines to Google Gemini in batches of 60, with the trending searches and nearby headlines as context ([`scripts/lib/prompt.mjs`](scripts/lib/prompt.mjs)). Gemini scores the best few for **public attention** (1-10): is it trending, covered by several outlets, called viral, the kind of thing people forward? Every story scoring **8 or more** is written up, in English and Thai; there is no cap. Most hours nothing qualifies, and nothing is published.
@@ -22,13 +22,13 @@ The list of links already judged is kept in the Actions cache (`.state/`), not i
 
 **Pillars:** animals, food and everyday life, festivals, weather and traffic (as "known issues"), small national wins.
 
-**Hard no's:** the monarchy (Thailand's lèse-majesté law), politics, crime, scams, and tragedy. These are blocked in code, in the prompt, and (in review mode) by a person. Over-blocking is acceptable. Never loosen the monarchy list.
+**Hard no's:** the monarchy (Thailand's lèse-majesté law), politics, crime, scams, and tragedy. These are blocked in code, in the prompt, and (in review mode) by a person. Over-blocking is acceptable. Never loosen the monarchy list. A policy change that has been decided (a tariff, price, visa rule or service) is allowed, written as what changed. Politicians, parties, elections, protests and policy debates are not.
 
 **Tone:** dry, short and affectionate. Laughing with Thailand, never at it.
 
-**Two tabs:** *Changelog* is Thailand as a whole: weather and seasons, festivals, places, official discoveries, national totals. *UGC* (user-generated content) is stories whose main characters are people: athletes winning medals, performers, photographers catching a rare sighting, villagers, vendors and viral clips. Gemini picks the tab for each story (the `channel` field). Notes never name private individuals or make fun of them.
+**Two tabs:** *Changelog* is real changes to how Thailand works, like "Thailand cuts the tariff on X": tariffs, taxes, prices, visa rules, regulations, transport, public services, official season changes. If nothing changed, it isn't changelog. *UGC* (user-generated content) is everything people did, found, won or celebrated: athletes winning medals, someone spotting a rare animal, festivals, villagers, vendors and viral clips. Gemini picks the tab for each story (the `channel` field). Notes never name private individuals or make fun of them.
 
-**Tags:** NEW, BUFF, NERF, BALANCE, EVENT, EVENT CONCLUDED (medals, prizes, results, a festival's last day) and KNOWN ISSUE (everyday weather and traffic).
+**Tags:** NEW, BUFF, NERF, REBALANCE, EVENT, EVENT CONCLUDED (medals, prizes, results, a festival's last day) and KNOWN ISSUE (everyday weather and traffic).
 
 **The bar:** a story needs real public attention. The benchmark is Moo Deng. Each run's log (Actions → News check → a run → "Find and write stories") lists what Gemini considered and the score it gave, so near-misses are visible. To publish more or less, change `minAttention` in [`scripts/config.mjs`](scripts/config.mjs).
 

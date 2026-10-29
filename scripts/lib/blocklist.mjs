@@ -9,9 +9,10 @@ const EN = [
   "kings?", "queens?", "royals?", "royalty", "monarch\\w*", "majesty", "l[eè]se[- ]majest\\w*",
   "crown prince", "princes?", "princess\\w*", "palace\\w*", "coronation", "regent", "throne",
   "vajiralongkorn", "bhumibol", "sirikit", "suthida", "chakri", "(?:article|section) 112",
-  // politics, military, conflict
-  "prime minister", "premier", "ministers?", "ministry", "elections?", "electoral", "parliament\\w*",
-  "senat\\w*", "mps?", "politic\\w*", "coups?", "protest\\w*", "cabinet", "constitution\\w*",
+  // politics, military, conflict. Ministries, the cabinet and "government" are allowed through:
+  // a decided policy change (a tariff, a visa rule) is changelog material; politicians are not.
+  "prime minister", "premier", "elections?", "electoral", "parliament\\w*",
+  "senat\\w*", "mps?", "politic\\w*", "coups?", "protest\\w*", "constitution\\w*",
   "pheu thai", "bhumjaithai", "people.s party", "democrat party", "thaksin", "paetongtarn",
   "shinawatra", "anutin", "srettha", "prayut", "chadchart", "opposition",
   "junta", "military", "army", "soldiers?", "troops?", "wars?",
@@ -41,8 +42,8 @@ const TH = [
   "พระเจ้าอยู่หัว", "พระมหากษัตริย์", "กษัตริย์", "ราชินี", "ทรงพระ", "โปรดเกล้า", "ทูลเกล้า",
   "เสด็จ", "พยุหยาตรา", "ชลมารค", "ถวายพระพร", "หม่อมเจ้า", "หมิ่นสถาบัน", "ม.112", "มาตรา 112",
   "รัชกาล", "ร.9", "ร.10",
-  // politics, military, conflict
-  "นายกรัฐมนตรี", "นายกฯ", "รัฐมนตรี", "รมว.", "รมช.", "ครม.", "รัฐบาล", "ส.ส.", "สส.", "ส.ว.", "สว.",
+  // politics, military, conflict (ministries, ครม. and รัฐบาล are allowed through, as above)
+  "นายกรัฐมนตรี", "นายกฯ", "ส.ส.", "สส.", "ส.ว.", "สว.",
   "รัฐสภา", "เลือกตั้ง", "พรรค", "การเมือง", "ศาลรัฐธรรมนูญ", "รัฐประหาร", "ชุมนุม", "ประท้วง",
   "ม็อบ", "ทักษิณ", "แพทองธาร", "ชินวัตร", "อนุทิน", "เศรษฐา", "ประยุทธ์", "พิธา", "ชัชชาติ",
   "เพื่อไทย", "ภูมิใจไทย", "ประชาธิปัตย์", "ฝ่ายค้าน", "ซักฟอก", "ม.157",
@@ -56,6 +57,7 @@ const TH = [
   "คอร์รัปชัน", "สินบน", "พนัน", "ค้ามนุษย์", "ลักลอบ", "ศาลอาญา", "ศาลฎีกา", "ศาลแพ่ง",
   "ศาลปกครอง", "ศาลจังหวัด", "พิพากษา", "ฟ้อง", "ติดคุก", "จำคุก", "เรือนจำ", "อุบัติเหตุ",
   "รถชน", "รถคว่ำ", "จมน้ำ", "ไฟไหม้", "เพลิงไหม้", "บาดเจ็บ", "สูญหาย", "อพยพ",
+  "ดับสลด", "ดับคาที่", "ดับอนาถ", "สิ้นใจ", "พลัดตก",
   // disasters and safety incidents (ระทึก, "nerve-wracking", heads most incident reports)
   "ระทึก", "น้ำป่า", "ดินถล่ม", "ดินสไลด์", "อุทกภัย", "ผู้ประสบภัย", "เยียวยา", "น้ำท่วมหนัก",
   "จมมิด", "จมบาดาล", "ภัยพิบัติ",
