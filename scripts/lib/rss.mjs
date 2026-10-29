@@ -79,6 +79,31 @@ export async function fetchTrends(url) {
     .filter((t) => t.term);
 }
 
+/**
+ * Follows a WordPress feed's older pages (?paged=2, 3, …) until it reaches `since` (ms).
+ * Stops early when a page comes back empty, fails, or repeats the previous one.
+ */
+export async function fetchFeedHistory(feed, since, maxPages) {
+  const all = [];
+  let previousFirst = null;
+  for (let page = 1; page <= maxPages; page++) {
+    const url = page === 1 ? feed.url : `${feed.url}${feed.url.includes("?") ? "&" : "?"}paged=${page}`;
+    let items;
+    try {
+      items = await fetchFeed({ ...feed, url });
+    } catch (err) {
+      if (page === 1) throw err;
+      break;
+    }
+    if (!items.length || items[0].link === previousFirst) break;
+    previousFirst = items[0].link;
+    all.push(...items.map((i) => ({ ...i, feed })));
+    if (Math.min(...items.map((i) => i.published ?? Infinity)) < since) break;
+    await new Promise((r) => setTimeout(r, 300)); // be gentle with the publisher
+  }
+  return all;
+}
+
 /** Fetches one feed and returns its items as { title, link, summary, published, feed }. */
 export async function fetchFeed(feed) {
   const xml = await getXml(feed.url);

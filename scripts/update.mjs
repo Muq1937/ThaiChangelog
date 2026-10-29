@@ -1,18 +1,21 @@
 #!/usr/bin/env node
 // Hourly job. Reads the Thai news feeds and Google Trends for Thailand, drops hard-no topics and
-// links it has already judged, and asks the model which new stories (if any) have real public
-// attention. Only stories scored LIMITS.minAttention or higher are written up, so most runs
-// publish nothing. Each note is saved as its own file in data/entries/.
+// links it has already judged, and asks the model, in batches, which stories have real public
+// attention. Every story scored LIMITS.minAttention or higher is written up; most runs publish
+// nothing. Each note is saved as its own file in data/entries/.
 //
-//   node scripts/update.mjs             normal run (needs GEMINI_API_KEY, from the env or .env)
-//   node scripts/update.mjs --preview   calls the model and prints the result; writes nothing
-//   node scripts/update.mjs --dry-run   fetches and filters only; no model call, writes nothing
+//   node scripts/update.mjs                 normal run (needs GEMINI_API_KEY, from the env or .env)
+//   node scripts/update.mjs --backfill 14   judge the past 14 days, as far back as the feeds go,
+//                                           one day at a time; notes are dated to the article
+//   node scripts/update.mjs --preview       call the model and print the result; write nothing
+//   node scripts/update.mjs --dry-run       fetch and filter only; no model call, write nothing
+//   BACKFILL_DAYS=14 in the environment works like --backfill 14 (the manual workflow run uses it).
 
 import fs from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { FEEDS, LIMITS, TRENDS_URL } from "./config.mjs";
-import { fetchFeed, fetchTrends } from "./lib/rss.mjs";
+import { fetchFeed, fetchFeedHistory, fetchTrends } from "./lib/rss.mjs";
 import { blockedTerm } from "./lib/blocklist.mjs";
 import { chat, QuotaError } from "./lib/llm.mjs";
 import { systemPrompt, replySchema, userMessage, parseReply, toEntries } from "./lib/prompt.mjs";
@@ -23,17 +26,20 @@ const ENTRIES_DIR = path.join(ROOT, "data", "entries");
 const STATE_FILE = path.join(ROOT, ".state", "state.json"); // kept in the Actions cache, not in git
 const DRY_RUN = process.argv.includes("--dry-run");
 const PREVIEW = process.argv.includes("--preview");
+const backfillArg = process.argv.indexOf("--backfill");
+const BACKFILL_DAYS = backfillArg >= 0 ? Number(process.argv[backfillArg + 1]) || 14 : Number(process.env.BACKFILL_DAYS) || 0;
 const HOUR = 3_600_000;
 const DAY = 24 * HOUR;
 const THAI = /[฀-๿]/;
+const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
 
 const TAG_LABEL = { new: "NEW", buff: "BUFF", balance: "BALANCE", event: "EVENT", known: "KNOWN ISSUE" };
 
-function bangkokNow() {
+function bangkok(ms) {
   const parts = new Intl.DateTimeFormat("en-CA", {
     timeZone: "Asia/Bangkok", year: "numeric", month: "2-digit", day: "2-digit",
     hour: "2-digit", minute: "2-digit", hourCycle: "h23",
-  }).formatToParts(new Date());
+  }).formatToParts(new Date(ms));
   const p = Object.fromEntries(parts.map((x) => [x.type, x.value]));
   return { date: `${p.year}-${p.month}-${p.day}`, time: `${p.hour}:${p.minute}` };
 }
@@ -57,8 +63,8 @@ function loadEntries() {
   if (!fs.existsSync(ENTRIES_DIR)) return [];
   return fs.readdirSync(ENTRIES_DIR)
     .filter((f) => f.endsWith(".json"))
-    .map((f) => readJson(path.join(ENTRIES_DIR, f), null))
-    .filter(Boolean);
+    .map((f) => ({ id: path.basename(f, ".json"), ...readJson(path.join(ENTRIES_DIR, f), null) }))
+    .filter((e) => e.title);
 }
 
 function setOutput(name, value) {
@@ -70,6 +76,47 @@ function saveState(state) {
   fs.writeFileSync(STATE_FILE, JSON.stringify(state));
 }
 
+function chunk(list, size) {
+  const out = [];
+  for (let i = 0; i < list.length; i += size) out.push(list.slice(i, i + size));
+  return out;
+}
+
+// Trending articles first, then newest first from each feed in turn, so one busy feed
+// does not crowd a batch.
+function ordered(items) {
+  const sorted = [...items].sort((a, b) => (b.published ?? 0) - (a.published ?? 0));
+  const out = sorted.filter((i) => i.trend);
+  const queues = new Map();
+  for (const item of sorted.filter((i) => !i.trend)) {
+    if (!queues.has(item.feed.url)) queues.set(item.feed.url, []);
+    queues.get(item.feed.url).push(item);
+  }
+  while ([...queues.values()].some((q) => q.length)) {
+    for (const q of queues.values()) if (q.length) out.push(q.shift());
+  }
+  return out;
+}
+
+// One model call, with one retry if the reply is not valid JSON.
+async function ask(messages) {
+  let reply = await chat({ messages, schema: replySchema });
+  try {
+    return { reply, parsed: parseReply(reply.content) };
+  } catch (err) {
+    console.warn(`The reply was not usable JSON (${err.message}). Asking once more.`);
+    reply = await chat({
+      messages: [
+        ...messages,
+        { role: "assistant", content: reply.content },
+        { role: "user", content: "That was not valid JSON. Reply again with only the JSON object and nothing else." },
+      ],
+      schema: replySchema,
+    });
+    return { reply, parsed: parseReply(reply.content) };
+  }
+}
+
 function summaryMarkdown(entries, statsLine, when) {
   const notes = entries.map((e) => [
     `### [${TAG_LABEL[e.tag]}] ${e.title.en}`,
@@ -77,7 +124,7 @@ function summaryMarkdown(entries, statsLine, when) {
     e.body.en,
     e.body.th,
     `Attention ${e.attention.score}/10: ${e.attention.reason}`,
-    `Source: [${e.source.headline}](${e.source.url}) (${e.source.name.en}) · pillar: ${e.pillar} · file: \`data/entries/${e.id}.json\``,
+    `Source: [${e.source.headline}](${e.source.url}) (${e.source.name.en}) · ${e.date} ${e.time} · pillar: ${e.pillar} · file: \`data/entries/${e.id}.json\``,
   ].join("\n\n"));
   return [
     `New stories from the ${when} (UTC+7) check. Merge to publish, close to discard, or edit the JSON files in this pull request to fix the wording first.`,
@@ -89,25 +136,39 @@ function summaryMarkdown(entries, statsLine, when) {
 async function main() {
   const now = Date.now();
   const nowIso = new Date(now).toISOString();
-  const { date: today, time } = bangkokNow();
+  const runAt = bangkok(now);
+  const maxAge = BACKFILL_DAYS ? BACKFILL_DAYS * DAY : LIMITS.maxAgeHours * HOUR;
+  if (BACKFILL_DAYS) console.log(`Backfill: judging up to ${BACKFILL_DAYS} days back.`);
 
   const state = readJson(STATE_FILE, {});
   state.seen ??= {};
   state.proposed = (state.proposed ?? []).filter((p) => now - Date.parse(p.at) < 7 * DAY);
-  state.recent = (state.recent ?? []).filter((r) => now - Date.parse(r.at) < LIMITS.contextHours * HOUR);
+  state.recent = (state.recent ?? [])
+    .map((r) => ({ t: r.t, f: r.f, ms: r.ms ?? Date.parse(r.at) }))
+    .filter((r) => now - r.ms < Math.max(maxAge, LIMITS.contextHours * HOUR));
   for (const [url, at] of Object.entries(state.seen)) {
     if (now - Date.parse(at) > LIMITS.seenDays * DAY) delete state.seen[url];
   }
 
   const entries = loadEntries();
   const publishedUrls = new Set(entries.map((e) => canonical(e.source?.url ?? "")));
+  const usedIds = new Set(entries.map((e) => e.id));
+  const newId = ({ date, time }) => {
+    const base = `${date}-${time.replace(":", "")}`;
+    let n = 1;
+    while (usedIds.has(`${base}-${n}`)) n++;
+    usedIds.add(`${base}-${n}`);
+    return `${base}-${n}`;
+  };
 
-  // 1. Read every feed, plus Google Trends. One broken source is fine; all feeds failing is not.
+  // 1. Read every feed (older pages too, in a backfill) plus Google Trends.
+  //    One broken source is fine; all feeds failing is not.
   const trendsPromise = fetchTrends(TRENDS_URL).catch((err) => {
     console.warn(`  Google Trends failed: ${err.message}`);
     return [];
   });
-  const results = await Promise.allSettled(FEEDS.map(fetchFeed));
+  const results = await Promise.allSettled(FEEDS.map((feed) =>
+    BACKFILL_DAYS && feed.paged ? fetchFeedHistory(feed, now - maxAge, LIMITS.maxPages) : fetchFeed(feed)));
   const trends = await trendsPromise;
   const items = [];
   const failed = [];
@@ -142,124 +203,131 @@ async function main() {
     const titleKey = item.title.toLowerCase().replace(/\s+/g, " ");
     if (state.seen[url] || publishedUrls.has(url) || titles.has(titleKey)) { stats.seen++; continue; }
     titles.add(titleKey);
-    if (item.published && now - item.published > LIMITS.maxAgeHours * HOUR) {
-      stats.old++; judged.push(url); continue;
-    }
+    if (item.published && now - item.published > maxAge) { stats.old++; judged.push(url); continue; }
     const term = blockedTerm(`${item.title} ${item.summary}`);
     if (term) {
       stats.blocked++; judged.push(url);
-      if (DRY_RUN) console.log(`  blocked by "${term}": ${item.title}`);
+      if (DRY_RUN && !BACKFILL_DAYS) console.log(`  blocked by "${term}": ${item.title}`);
       continue;
     }
-    fresh.push({ ...item, url });
+    fresh.push({ ...item, url, ms: item.published ?? now });
   }
 
-  // 3. Trending articles first, then newest first from each feed in turn, so one busy feed
-  //    cannot fill the list.
-  fresh.sort((a, b) => (b.published ?? 0) - (a.published ?? 0));
-  const candidates = fresh.filter((i) => i.trend).slice(0, LIMITS.maxTrending);
-  const queues = new Map();
-  for (const item of fresh.filter((i) => !i.trend)) {
-    if (!queues.has(item.feed.url)) queues.set(item.feed.url, []);
-    queues.get(item.feed.url).push(item);
-  }
-  while (candidates.length < LIMITS.maxCandidates && [...queues.values()].some((q) => q.length)) {
-    for (const q of queues.values()) {
-      if (q.length && candidates.length < LIMITS.maxCandidates) candidates.push(q.shift());
+  // 3. Plan the batches. Normally one or two; a backfill goes one Bangkok day at a time,
+  //    oldest first, so stories already published are listed as covered for later days.
+  const plan = [];
+  if (BACKFILL_DAYS) {
+    const days = new Map();
+    for (const item of fresh) {
+      const d = bangkok(item.ms).date;
+      if (!days.has(d)) days.set(d, []);
+      days.get(d).push(item);
     }
+    for (const d of [...days.keys()].sort()) {
+      chunk(ordered(days.get(d)), LIMITS.batchSize).forEach((batch, i, all) => plan.push({ label: all.length > 1 ? `${d} (${i + 1}/${all.length})` : d, batch }));
+    }
+  } else {
+    chunk(ordered(fresh), LIMITS.batchSize).forEach((batch, i) => plan.push({ label: `batch ${i + 1}`, batch }));
   }
 
-  // Headlines from earlier runs (and this run's overflow) show how widely a story is covered.
-  const inBatch = new Set(candidates.map((c) => c.title));
-  const recent = new Map(state.recent.map((r) => [r.t, r]));
-  for (const i of fresh) if (!recent.has(i.title)) recent.set(i.title, { t: i.title, f: i.feed.name.en, at: nowIso });
-  const context = [...recent.values()].filter((r) => !inBatch.has(r.t)).slice(-LIMITS.contextLines);
-  state.recent = [...recent.values()].slice(-400);
+  // Headlines from earlier runs plus this one, to judge how widely a story is covered.
+  const pool = new Map(state.recent.map((r) => [r.t, r]));
+  for (const i of fresh) if (!pool.has(i.title)) pool.set(i.title, { t: i.title, f: i.feed.name.en, ms: i.ms });
+  const contextFor = (batch) => {
+    const inBatch = new Set(batch.map((c) => c.title));
+    const center = Math.max(...batch.map((c) => c.ms));
+    return [...pool.values()]
+      .filter((r) => !inBatch.has(r.t) && Math.abs(r.ms - center) <= LIMITS.contextHours * HOUR)
+      .sort((a, b) => Math.abs(a.ms - center) - Math.abs(b.ms - center))
+      .slice(0, LIMITS.contextLines);
+  };
 
-  const todayIds = new Set([
-    ...entries.filter((e) => e.date === today).map((e) => e.id),
-    ...state.proposed.filter((p) => p.date === today).map((p) => p.id),
-  ]);
-  const room = Math.min(LIMITS.maxPerRun, LIMITS.maxPerDay - todayIds.size);
   const statsLine = `${items.length} feed items and ${trendItems.length} trending articles · ${stats.seen} already seen · ` +
-    `${stats.old} too old · ${stats.blocked} blocked by the hard-no list · ${candidates.length} sent to the model ` +
-    `with ${context.length} earlier headlines as context`;
+    `${stats.old} too old · ${stats.blocked} blocked by the hard-no list · ${fresh.length} judged in ${plan.length} batch(es)`;
   console.log(statsLine);
 
   if (DRY_RUN) {
     console.log(`Trending: ${trending.join(" · ") || "none"}`);
-    candidates.forEach((c, i) => console.log(`  [${i + 1}] (${c.feed.name.en}${c.trend ? `, trending ${c.trend}` : ""}) ${c.title}`));
-    setOutput("new_entries", 0);
-    return;
-  }
-  if (room <= 0 || !candidates.length) {
-    console.log(room <= 0 ? "Daily limit reached; nothing more today." : "Nothing new to judge.");
-    if (!PREVIEW) {
-      for (const url of judged) state.seen[url] = nowIso;
-      saveState(state);
+    for (const { label, batch } of plan) {
+      console.log(`${label}: ${batch.length} headlines, ${contextFor(batch).length} as context`);
+      if (!BACKFILL_DAYS) batch.forEach((c, i) => console.log(`  [${i + 1}] (${c.feed.name.en}${c.trend ? `, trending ${c.trend}` : ""}) ${c.title}`));
     }
     setOutput("new_entries", 0);
     return;
   }
 
-  // 4. Ask the model. One retry if the reply is not valid JSON; a second failure fails the run,
-  //    and because the memory is not saved, the same headlines are judged again next hour.
-  const covered = [
-    ...entries
-      .filter((e) => now - Date.parse(`${e.date}T${e.time}:00+07:00`) < 7 * DAY)
-      .map((e) => e.title.en),
-    ...state.proposed.map((p) => p.title),
-  ].slice(-40);
-  const messages = [
-    { role: "system", content: systemPrompt({ maxPicks: room, minAttention: LIMITS.minAttention }) },
-    { role: "user", content: userMessage({ candidates, covered, context, trending }) },
-  ];
-  let reply = await chat({ messages, schema: replySchema });
-  let parsed;
-  try {
-    parsed = parseReply(reply.content);
-  } catch (err) {
-    console.warn(`The reply was not usable JSON (${err.message}). Asking once more.`);
-    messages.push(
-      { role: "assistant", content: reply.content },
-      { role: "user", content: "That was not valid JSON. Reply again with only the JSON object and nothing else." },
-    );
-    reply = await chat({ messages, schema: replySchema });
-    parsed = parseReply(reply.content);
+  // 4. Judge each batch. A failed batch is skipped (its headlines stay unjudged for next
+  //    time); two failures in a row stop the run, keeping what is already done.
+  const notes = [];
+  let succeeded = 0;
+  let failedInARow = 0;
+  for (const [n, { label, batch }] of plan.entries()) {
+    if (n > 0) await sleep(6000); // stay under the free tier's requests-per-minute limit
+    const covered = [
+      ...entries.filter((e) => now - Date.parse(`${e.date}T${e.time}:00+07:00`) < maxAge + 7 * DAY).map((e) => e.title.en),
+      ...state.proposed.map((p) => p.title),
+      ...notes.map((e) => e.title.en),
+    ].slice(-80);
+    const recentBatch = now - Math.max(...batch.map((c) => c.ms)) < LIMITS.maxAgeHours * HOUR;
+    const messages = [
+      { role: "system", content: systemPrompt({ minAttention: LIMITS.minAttention }) },
+      { role: "user", content: userMessage({ candidates: batch, covered, context: contextFor(batch), trending: recentBatch ? trending : [] }) },
+    ];
+    let reply, parsed;
+    try {
+      ({ reply, parsed } = await ask(messages));
+    } catch (err) {
+      console.warn(`${label}: skipped. ${err.message}`);
+      failedInARow++;
+      if (err instanceof QuotaError || failedInARow >= 2) {
+        console.warn("Stopping here; what is done so far is kept, and the rest is judged next time.");
+        break;
+      }
+      continue;
+    }
+    succeeded++;
+    failedInARow = 0;
+
+    // Log every story the model weighed, so the attention bar can be tuned from the run logs.
+    console.log(`${label}: ${batch.length} headlines · ${reply.model}, ${reply.usage.prompt_tokens} tokens in, ${reply.usage.completion_tokens} out`);
+    for (const c of parsed.considered) {
+      console.log(`  ${c.attention}/10 ${batch[Number(c.id) - 1]?.title ?? `[${c.id}]`}\n         ${c.reason}`);
+    }
+    const when = (c) => (BACKFILL_DAYS ? bangkok(c.ms) : runAt);
+    const { entries: made, rejected } = toEntries(parsed, batch, { when, minAttention: LIMITS.minAttention });
+    for (const r of rejected) console.warn(`  Rejected pick ${r}`);
+    for (const e of made) {
+      e.id = newId(e);
+      console.log(`  → publishing [${TAG_LABEL[e.tag]}] ${e.title.en}`);
+      if (!PREVIEW) {
+        fs.mkdirSync(ENTRIES_DIR, { recursive: true });
+        fs.writeFileSync(path.join(ENTRIES_DIR, `${e.id}.json`), JSON.stringify(e, null, 2) + "\n");
+      }
+    }
+    notes.push(...made);
+    for (const c of batch) state.seen[c.url] = nowIso;
   }
-  console.log(`Model ${reply.model}: ${reply.usage.prompt_tokens} tokens in, ${reply.usage.completion_tokens} out (including thinking).`);
 
-  // Log every story the model weighed, so the attention bar can be tuned from the run logs.
-  console.log(parsed.considered.length ? `Considered (publishing needs ${LIMITS.minAttention}/10):` : "Nothing fit a pillar.");
-  for (const c of parsed.considered) {
-    const cand = candidates[Number(c.id) - 1];
-    console.log(`  ${c.attention}/10 [${c.id}] ${cand?.title ?? "?"}\n         ${c.reason}`);
-  }
-
-  const { entries: notes, rejected } = toEntries(parsed, candidates, { date: today, time, room, minAttention: LIMITS.minAttention });
-  for (const r of rejected) console.warn(`  Rejected pick ${r}`);
-  notes.forEach((e, i) => { e.id = `${today}-${time.replace(":", "")}-${i + 1}`; });
-  console.log(notes.length ? `Publishing ${notes.length}.` : "Nothing worth publishing this hour.");
-
+  // 5. Remember what was judged, and report.
   if (PREVIEW) {
     if (notes.length) console.log(JSON.stringify(notes, null, 2));
+    console.log(`${notes.length} would be published.`);
     setOutput("new_entries", 0);
     return;
   }
-
-  // 5. Save the notes and remember everything that was judged.
-  fs.mkdirSync(ENTRIES_DIR, { recursive: true });
-  for (const e of notes) fs.writeFileSync(path.join(ENTRIES_DIR, `${e.id}.json`), JSON.stringify(e, null, 2) + "\n");
-  for (const url of [...judged, ...candidates.map((c) => c.url)]) state.seen[url] = nowIso;
+  for (const url of judged) state.seen[url] = nowIso;
   state.proposed.push(...notes.map((e) => ({ id: e.id, date: e.date, title: e.title.en, at: nowIso })));
+  state.recent = [...pool.values()].sort((a, b) => a.ms - b.ms).slice(-1500);
   saveState(state);
 
+  console.log(notes.length ? `Published ${notes.length}.` : "Nothing worth publishing this time.");
   if (notes.length) {
-    const md = summaryMarkdown(notes, statsLine, `${today} ${time}`);
+    const md = summaryMarkdown(notes, statsLine, `${runAt.date} ${runAt.time}`);
     if (process.env.SUMMARY_FILE) fs.writeFileSync(process.env.SUMMARY_FILE, md);
     if (process.env.GITHUB_STEP_SUMMARY) fs.appendFileSync(process.env.GITHUB_STEP_SUMMARY, md);
   }
   setOutput("new_entries", notes.length);
+  if (plan.length && !succeeded) throw new Error("Every batch failed; see the warnings above.");
 }
 
 main().catch((err) => {

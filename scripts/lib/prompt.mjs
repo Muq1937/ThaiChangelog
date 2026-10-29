@@ -2,9 +2,9 @@
 import { TAGS, PILLARS } from "../config.mjs";
 import { blockedTerm } from "./blocklist.mjs";
 
-export const systemPrompt = ({ maxPicks, minAttention }) => `You are the editor of Thailand Changelog, a website that rewrites real news from Thailand as video-game patch notes, in English and Thai.
+export const systemPrompt = ({ minAttention }) => `You are the editor of Thailand Changelog, a website that rewrites real news from Thailand as video-game patch notes, in English and Thai.
 
-Every hour you get a batch of new headlines from Thai news sites, plus context: what people in Thailand are searching for on Google right now, other headlines from the last two days, and what the site already covered. Your job is to find the rare story that genuinely deserves a place on the site. Most hours nothing does, and an empty "picks" list is the expected answer.
+You get a batch of headlines from Thai news sites, plus context: what people in Thailand are searching for on Google (when available), other headlines from around the same days, and what the site already covered. Your job is to find the rare story that genuinely deserves a place on the site. Most batches have none, and an empty "picks" list is the expected answer.
 
 PUBLIC ATTENTION
 A story is worth publishing only if a lot of people in Thailand are paying attention to it: talking about it, sharing it or searching for it. The benchmark is Moo Deng, the baby pygmy hippo the whole country, and then the world, could not stop sharing. Signs of attention:
@@ -58,8 +58,8 @@ Write every note in both languages. The Thai must read naturally, as a Thai game
 
 REPLY
 One JSON object with two lists:
-- "considered": the few best headlines to judge (at most 5) that fit a pillar and break no hard rule, each with "id", "attention" (1-10) and "reason" (one short sentence naming the evidence of attention). Empty if none fit.
-- "picks": a full patch note for each considered headline with attention ${minAttention} or higher, at most ${maxPicks}. Usually empty.`;
+- "considered": the best headlines that fit a pillar and break no hard rule (at most 8), each with "id", "attention" (1-10) and "reason" (one short sentence naming the evidence of attention). Empty if none fit.
+- "picks": a full patch note for every considered headline with attention ${minAttention} or higher. When several headlines are the same story, write it once, from the headline with the most detail. Usually empty.`;
 
 // Gemini response schema: the reply must be exactly this shape.
 const str = { type: "STRING" };
@@ -110,9 +110,9 @@ export function userMessage({ candidates, covered, context, trending }) {
     })
     .join("\n");
   return [
-    `Trending Google searches in Thailand right now:\n${list(trending, "not available this hour")}`,
+    `Trending Google searches in Thailand right now:\n${list(trending, "not available for this batch")}`,
     `Already on the site. Do not cover these stories again:\n${list(covered, "none")}`,
-    `Other headlines from the last two days. Context only, for judging how widely a story is covered; do not pick from this list:\n${list(context.map((r) => `(${r.f}) ${r.t}`), "none")}`,
+    `Other headlines from around the same days. Context only, for judging how widely a story is covered; do not pick from this list:\n${list(context.map((r) => `(${r.f}) ${r.t}`), "none")}`,
     `Headlines to judge:\n${headlines}`,
   ].join("\n\n");
 }
@@ -147,8 +147,9 @@ function fieldProblem(p) {
 /**
  * Turns picks into entries. A pick is kept only if the model scored its attention at or above
  * minAttention and it passes every check; anything else is rejected with a reason.
+ * `when(candidate)` gives the entry's { date, time }.
  */
-export function toEntries({ considered, picks }, candidates, { date, time, room, minAttention }) {
+export function toEntries({ considered, picks }, candidates, { when, minAttention }) {
   const scores = new Map(considered.map((c) => [Number(c.id), c]));
   const entries = [];
   const rejected = [];
@@ -165,7 +166,7 @@ export function toEntries({ considered, picks }, candidates, { date, time, room,
       !PILLARS.includes(p.pillar) ? `unknown pillar "${p.pillar}"` :
       fieldProblem(p);
     const hit = problem ? null : blockedTerm([p.title_en, p.title_th, p.body_en, p.body_th].join(" "));
-    const reason = problem ?? (hit ? `the text contains the blocked term "${hit}"` : entries.length >= room ? "over the limit for this run" : null);
+    const reason = problem ?? (hit ? `the text contains the blocked term "${hit}"` : null);
     if (reason) {
       rejected.push(`[${p?.id}] ${reason}`);
       continue;
@@ -173,8 +174,7 @@ export function toEntries({ considered, picks }, candidates, { date, time, room,
     used.add(c);
     entries.push({
       id: "",
-      date,
-      time,
+      ...when(c),
       tag: p.tag,
       pillar: p.pillar,
       title: { en: p.title_en.trim(), th: p.title_th.trim() },

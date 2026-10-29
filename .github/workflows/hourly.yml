@@ -4,6 +4,11 @@ on:
   schedule:
     - cron: "17 * * * *" # every hour at :17; GitHub delays runs scheduled on the hour
   workflow_dispatch:
+    inputs:
+      backfill_days:
+        description: "Also judge older stories, this many days back (0 = a normal hourly run)"
+        required: false
+        default: "0"
 
 permissions:
   contents: write
@@ -18,7 +23,7 @@ concurrency:
 jobs:
   update:
     runs-on: ubuntu-latest
-    timeout-minutes: 15
+    timeout-minutes: 60 # an hourly run takes about a minute; a two-week backfill can take much longer
     outputs:
       published: ${{ steps.publish.outputs.published }}
     steps:
@@ -41,6 +46,7 @@ jobs:
         env:
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
           GEMINI_MODEL: ${{ vars.GEMINI_MODEL }} # optional comma-separated fallback list; see scripts/lib/llm.mjs
+          BACKFILL_DAYS: ${{ inputs.backfill_days || '0' }}
           SUMMARY_FILE: ${{ runner.temp }}/summary.md
         run: node scripts/update.mjs
 
