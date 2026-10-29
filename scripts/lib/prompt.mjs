@@ -55,8 +55,8 @@ TONE
 
 CHANNEL
 The site has two tabs. Put each pick in one:
-- "changelog": a real change to how Thailand works, decided or already in effect: tariffs, taxes and prices, visa and travel rules, regulations people must follow, transport routes and fares, public services opening or closing, official season changes. Write the change itself: what changed, by how much, from when. If nothing changed, it is not changelog.
-- "ugc" (user-generated content): everything people did, found, won or celebrated. That includes athletes and teams winning medals, performers and celebrities at work, someone spotting a rare animal or making a discovery, festivals and community events, and ordinary people or local communities (villagers, vendors, shop staff, farmers, tourists) doing something people share: a viral clip, an unusual skill, a homemade invention, a village custom, a kind act.
+- "changelog": a real change to how Thailand works, decided or already in effect: tariffs, taxes and prices, visa and travel rules, regulations people must follow, transport routes and fares, public services opening or closing, official season changes. Write the change itself: what changed, by how much, from when. Official national events also belong here: when one is announced or starts, and when it ends or its results come in (a national festival, a games' final medal table). Otherwise, if nothing changed, it is not changelog.
+- "ugc" (user-generated content): everything people did, found, won or celebrated. That includes individual athletes and teams winning medals, performers and celebrities at work, someone spotting a rare animal or making a discovery, local and community events, and ordinary people or local communities (villagers, vendors, shop staff, farmers, tourists) doing something people share: a viral clip, an unusual skill, a homemade invention, a village custom, a kind act.
 In every note, and especially "ugc" ones, never mock the person, and never name a private individual. Describe them by role or place instead (a 7-Eleven clerk, a grandmother in Nan).
 
 TAGS
@@ -64,10 +64,11 @@ TAGS
 - buff: something got better (a tariff or fee cut, a longer visa-free stay, a new service)
 - nerf: something got a little worse (a price or tax rise, a perk removed, a stricter rule). Only minor setbacks, never harm to people.
 - rebalance: a change with trade-offs, or an adjustment that is neither clearly better nor worse
-- event: a festival or time-limited happening that is coming up or under way
-- concluded: an event or competition has finished: medals, prizes, awards, results, a festival's final day
+- event: an event is announced, coming up or under way (a festival, a time-limited change, a community gathering)
+- concluded: an official event has ended, or its results are in (a festival's final day, a games' medal table)
 - known: a recurring everyday annoyance (weather, traffic). Only minor inconvenience, never a disaster.
-Each tab has its own tags. "changelog" notes use ${CHANNEL_TAGS.changelog.join(", ")}. "ugc" notes use only ${CHANNEL_TAGS.ugc.join(", ")}: a story about people is news (new), something coming up or under way (event), or a result (concluded).
+- news: a story about people: what someone did, found or won
+Each tab has its own tags. "changelog" notes use ${CHANNEL_TAGS.changelog.join(", ")}. "ugc" notes use only ${CHANNEL_TAGS.ugc.join(" or ")}: a story about people is news, unless it is about an event people are holding or taking part in.
 
 WRITING
 Write every note in both languages. The Thai must read naturally, as a Thai gamer would write it, not as a word-for-word translation. Gaming loanwords such as บัฟ, เนิร์ฟ, อีเวนต์ and แพตช์ are welcome. In Thai text, write years in the Buddhist Era (2026 is 2569).
@@ -198,10 +199,10 @@ export function toEntries({ considered, picks }, candidates, { when, minAttentio
     }
     used.add(c);
     // A tag that does not belong to the tab is mapped rather than rejected: in UGC anything
-    // that is not an event or a result is news; in the changelog a result is an event.
+    // that is not an event is news; in the changelog, news is new.
     let tag = p.tag;
     if (!CHANNEL_TAGS[p.channel].includes(tag)) {
-      tag = p.channel === "ugc" ? "new" : "event";
+      tag = p.channel === "ugc" ? "news" : "new";
       console.warn(`  [${p.id}] retagged ${p.tag} → ${tag} for ${p.channel}`);
     }
     entries.push({
