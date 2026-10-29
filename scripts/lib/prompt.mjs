@@ -140,6 +140,9 @@ export function parseReply(text) {
 }
 
 const THAI = /[฀-๿]/;
+// Letters from any script other than Latin and Thai. Models occasionally slip a Cyrillic or
+// Hebrew word into Thai text ("สפון" for "สปอว์น").
+const OTHER_SCRIPT = /(?![\p{Script=Latin}\p{Script=Thai}])\p{L}/u;
 // Looser than the limits in the prompt; Thai vowel and tone marks count as characters here.
 const MAX_LENGTH = { title_en: 90, title_th: 120, body_en: 300, body_th: 360 };
 
@@ -149,6 +152,8 @@ function fieldProblem(p) {
     if (typeof v !== "string" || !v.trim()) return `missing ${field}`;
     if (v.length > max) return `${field} is ${v.length} characters (limit ${max})`;
     if (field.endsWith("_th") !== THAI.test(v)) return `${field} is in the wrong language`;
+    const stray = v.match(OTHER_SCRIPT);
+    if (stray) return `${field} contains a letter from another script ("${stray[0]}")`;
   }
   return null;
 }
