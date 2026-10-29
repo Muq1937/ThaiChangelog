@@ -1,0 +1,28 @@
+{
+  "id": "2026-10-29-2022-1",
+  "date": "2026-10-29",
+  "time": "20:22",
+  "channel": "changelog",
+  "tag": "buff",
+  "pillar": "rules",
+  "title": {
+    "en": "Refinery fuel prices reduced by up to 0.35 baht per liter",
+    "th": "ปรับลดราคาหน้าโรงกลั่นสูงสุด 0.35 บาทต่อลิตร"
+  },
+  "body": {
+    "en": "A historic restructuring of refinery price formulas lowers fuel costs by 0.0875 to 0.3548 baht per liter, cutting hidden production overhead nationwide.",
+    "th": "มีการปรับโครงสร้างราคาน้ำมันหน้าโรงกลั่นทุกชนิดลง 0.0875–0.3548 บาทต่อลิตร เพื่อลดต้นทุนแฝงในระบบพลังงานทั่วประเทศ"
+  },
+  "source": {
+    "name": {
+      "en": "Khaosod",
+      "th": "ข่าวสด"
+    },
+    "url": "https://www.khaosod.co.th/economics/news_10452829",
+    "headline": "“เอกนัฏ” รื้อราคาหน้าโรงกลั่นครั้งประวัติศาสตร์ หั่นต้นทุนแฝง 1.08 หมื่นล้าน"
+  },
+  "attention": {
+    "score": 8,
+    "reason": "Nationwide adjustment to fuel refinery pricing structure affecting energy costs across Thailand."
+  }
+}
