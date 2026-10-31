@@ -1,0 +1,28 @@
+{
+  "id": "2026-11-01-0138-1",
+  "date": "2026-11-01",
+  "time": "01:38",
+  "channel": "ugc",
+  "tag": "event",
+  "pillar": "festivals",
+  "title": {
+    "en": "Khao Chamao Park cancels ghost skins for Halloween event",
+    "th": "อช.เขาชะเมาสั่งงดสกินผีรับฮาโลวีน ชี้ผีในแมปเดิมมีพอแล้ว"
+  },
+  "body": {
+    "en": "Khao Chamao-Khaowong National Park asked staff not to dress up as ghosts this Halloween, claiming the local server already has enough natural ghost spawns.",
+    "th": "อุทยานแห่งชาติเขาชะเมา-เขาวง ขอความร่วมมือเจ้าหน้าที่งดแต่งชุดผีในวันฮาโลวีน โดยระบุว่าจำนวนผีดั้งเดิมที่มีอยู่ในพื้นที่นั้นเพียงพออยู่แล้ว"
+  },
+  "source": {
+    "name": {
+      "en": "Sanook",
+      "th": "สนุก"
+    },
+    "url": "https://www.sanook.com/news/9910711/",
+    "headline": "อุทยานฯดังแจ้งงดแต่งผี วันฮาโลวีน เผยเหตุผล อ่านแล้วขนหัวลุก!"
+  },
+  "attention": {
+    "score": 8,
+    "reason": "Covered by multiple national outlets after the park's funny Halloween notice went viral."
+  }
+}
