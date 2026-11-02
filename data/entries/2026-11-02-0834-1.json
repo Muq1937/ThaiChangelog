@@ -1,0 +1,28 @@
+{
+  "id": "2026-11-02-0834-1",
+  "date": "2026-11-02",
+  "time": "08:34",
+  "channel": "changelog",
+  "tag": "buff",
+  "pillar": "rules",
+  "title": {
+    "en": "Khao Phanoen Thung reopens after 3-month nature break",
+    "th": "เปิดแล้ว 'เขาพะเนินทุ่ง' หลังปิดฟื้นฟูธรรมชาตินาน 3 เดือน"
+  },
+  "body": {
+    "en": "Kaeng Krachan National Park has unlocked the Khao Phanoen Thung viewpoint after a three-month seasonal restoration period. Daily visitor ascent and descent schedules are now active.",
+    "th": "อุทยานแห่งชาติแก่งกระจานเปิดจุดชมวิวเขาพะเนินทุ่งอีกครั้ง หลังปิดฟื้นฟูธรรมชาตินาน 3 เดือน พร้อมกำหนดเวลาขึ้น-ลงประจำวันแล้ว"
+  },
+  "source": {
+    "name": {
+      "en": "เดลินิวส์",
+      "th": "เดลินิวส์"
+    },
+    "url": "https://www.dailynews.co.th/news/6323504/",
+    "headline": "เฮ! วันแรกเปิด \"เขาพะเนินทุ่ง\" สัมผัสทะเลหมอกแก่งกระจาน หลังปิดฟื้นฟูธรรมชาตินาน 3 เดือน"
+  },
+  "attention": {
+    "score": 8,
+    "reason": "Matches trending search 'เวลา' and covered by multiple outlets for the seasonal reopening of Khao Phanoen Thung."
+  }
+}
