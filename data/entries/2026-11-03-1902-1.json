@@ -1,0 +1,28 @@
+{
+  "id": "2026-11-03-1902-1",
+  "date": "2026-11-03",
+  "time": "19:02",
+  "channel": "changelog",
+  "tag": "nerf",
+  "pillar": "rules",
+  "title": {
+    "en": "Imported EV tax nerf: 35% excise rate set for 2027",
+    "th": "เนิร์ฟภาษี EV นำเข้า ปรับขึ้นเป็น 35% มีผลปี 2570"
+  },
+  "body": {
+    "en": "The Cabinet has set a 35% excise tax rate on fully imported battery and range-extended electric vehicles. The new tax rate takes effect on 1 January 2027.",
+    "th": "ครม. ปรับขึ้นภาษีสรรพสามิตรถยนต์ไฟฟ้าแบบนำเข้าทั้งคันเป็น 35% มีผลบังคับใช้ตั้งแต่วันที่ 1 มกราคม 2570"
+  },
+  "source": {
+    "name": {
+      "en": "Thaiger",
+      "th": "Thaiger"
+    },
+    "url": "https://thethaiger.com/hot-news/economy/thailand-35-imported-ev-tax-january-2027",
+    "headline": "Thailand sets 35% imported EV tax from January 1, 2027"
+  },
+  "attention": {
+    "score": 8,
+    "reason": "Nationwide excise tax policy change affecting imported electric vehicles."
+  }
+}

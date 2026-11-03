@@ -1,0 +1,28 @@
+{
+  "id": "2026-11-03-1902-3",
+  "date": "2026-11-03",
+  "time": "19:02",
+  "channel": "changelog",
+  "tag": "rebalance",
+  "pillar": "festivals",
+  "title": {
+    "en": "Yi Peng festival update: Chiang Mai cancels 108 flights",
+    "th": "ปรับเที่ยวบินช่วงยี่เป็ง เชียงใหม่ยกเลิก 108 เที่ยวบิน"
+  },
+  "body": {
+    "en": "Chiang Mai Airport has cancelled 108 flights and rescheduled 80 others between 21 and 28 November to avoid sky lantern hazard risks.",
+    "th": "ท่าอากาศยานเชียงใหม่ยกเลิก 108 เที่ยวบิน และเปลี่ยนเวลา 80 เที่ยวบิน ระหว่างวันที่ 21-28 พ.ย. เพื่อความปลอดภัยจากโคมลอย"
+  },
+  "source": {
+    "name": {
+      "en": "Khaosod",
+      "th": "ข่าวสด"
+    },
+    "url": "https://www.khaosod.co.th/around-thailand/news_10459072",
+    "headline": "ท่าอากาศยานเชียงใหม่ รับมือ เทศกาลยี่เป็ง ยกเลิก108เที่ยวบิน หวั่นอันตราย เผชิญโคมลอย2แสนลูก"
+  },
+  "attention": {
+    "score": 8,
+    "reason": "Covered by multiple news outlets regarding flight cancellations during Yi Peng festival."
+  }
+}
