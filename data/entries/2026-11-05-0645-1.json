@@ -1,0 +1,28 @@
+{
+  "id": "2026-11-05-0645-1",
+  "date": "2026-11-05",
+  "time": "06:45",
+  "channel": "changelog",
+  "tag": "buff",
+  "pillar": "rules",
+  "title": {
+    "en": "Petrol fuel prices buffed: -0.70 baht per liter from 5 November",
+    "th": "บัฟราคาน้ำมันเบนซิน ลดลง 0.70 บาทต่อลิตร มีผล 5 พ.ย."
+  },
+  "body": {
+    "en": "Gasoline and gasohol prices drop by 0.70 baht per liter starting 5 November. E85 is excluded from this adjustment.",
+    "th": "ราคาน้ำมันกลุ่มเบนซินและแก๊สโซฮอล์ปรับลดลง 0.70 บาทต่อลิตร มีผล 5 พ.ย. ยกเว้นแก๊สโซฮอล์ E85"
+  },
+  "source": {
+    "name": {
+      "en": "Thai PBS",
+      "th": "Thai PBS"
+    },
+    "url": "https://www.thaipbs.or.th/news/content/572196",
+    "headline": "กบน.ปรับลดราคากลุ่มน้ำมันเบนซิน 0.70 บาทต่อลิตร ยกเว้นแก๊สโซฮอล์ E85 มีผล 5 พ.ย."
+  },
+  "attention": {
+    "score": 9,
+    "reason": "Matches top trending search 'น้ำมัน' with 2000+ searches and covered by multiple major outlets."
+  }
+}
