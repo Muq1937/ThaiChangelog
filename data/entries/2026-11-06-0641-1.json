@@ -1,0 +1,28 @@
+{
+  "id": "2026-11-06-0641-1",
+  "date": "2026-11-06",
+  "time": "06:41",
+  "channel": "changelog",
+  "tag": "buff",
+  "pillar": "rules",
+  "title": {
+    "en": "Automated passport control expanded to 33 nationalities",
+    "th": "ขยายช่องตรวจพาสปอร์ตอัตโนมัติรองรับ 33 สัญชาติ"
+  },
+  "body": {
+    "en": "Thailand's Immigration Bureau has expanded automated gate access for arriving passengers from 33 countries and territories. Daily usage has jumped 185.6% since the rollout.",
+    "th": "สตม. ขยายสิทธิการใช้ช่องตรวจพาสปอร์ตอัตโนมัติสำหรับผู้โดยสารขาเข้าเป็น 33 สัญชาติและดินแดน ส่งผลให้มียอดผู้ใช้งานต่อวันเพิ่มขึ้นถึง 185.6%"
+  },
+  "source": {
+    "name": {
+      "en": "Khaosod English",
+      "th": "Khaosod English"
+    },
+    "url": "https://www.khaosodenglish.com/tourism/2026/11/05/thailand-expands-automated-immigration-gates-to-33-countries-and-territories/",
+    "headline": "Thailand expands automated immigration gates to 33 countries and territories"
+  },
+  "attention": {
+    "score": 8,
+    "reason": "Nationwide expansion of automated airport passport control to 33 nationalities affects millions of travellers."
+  }
+}
