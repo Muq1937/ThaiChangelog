@@ -1,0 +1,28 @@
+{
+  "id": "2026-11-08-2343-1",
+  "date": "2026-11-08",
+  "time": "23:43",
+  "channel": "ugc",
+  "tag": "news",
+  "pillar": "animals",
+  "title": {
+    "en": "Trang dugong roster buffed: 27 spotted off Koh Libong",
+    "th": "บัฟประชากรพะยูนตรัง พบ 27 ตัวรวมฝูงรอบเกาะลิบง"
+  },
+  "body": {
+    "en": "A survey off Koh Libong in Trang spotted a large herd of 27 dugongs swimming together, including mothers alongside their calves.",
+    "th": "ผลการสำรวจรอบเกาะลิบง จังหวัดตรัง พบฝูงพะยูนใหญ่ 27 ตัวว่ายน้ำร่วมกัน โดยมีพะยูนแม่ลูกว่ายน้ำเคียงข้างกัน"
+  },
+  "source": {
+    "name": {
+      "en": "Matichon",
+      "th": "มติชน"
+    },
+    "url": "https://www.matichon.co.th/region/news_5966948",
+    "headline": "ฮือฮา! ตรังพบพะยูน 27 ตัว รวมฝูงใหญ่รอบเกาะลิบง มีแม่–ลูกว่ายน้ำเคียงกัน"
+  },
+  "attention": {
+    "score": 8,
+    "reason": "Explicitly headlined as sensational ('ฮือฮา') for a rare record herd of 27 dugongs spotted in Trang."
+  }
+}
