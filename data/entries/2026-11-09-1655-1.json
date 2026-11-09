@@ -1,0 +1,28 @@
+{
+  "id": "2026-11-09-1655-1",
+  "date": "2026-11-09",
+  "time": "16:55",
+  "channel": "changelog",
+  "tag": "buff",
+  "pillar": "rules",
+  "title": {
+    "en": "Bank cybersecurity buffed following global server outages",
+    "th": "ยกระดับการป้องกันไซเบอร์ ธปท. สั่งแบงก์เข้มระบบความปลอดภัย"
+  },
+  "body": {
+    "en": "The Bank of Thailand has ordered all commercial banks to step up cyber defenses and submit daily security reports after IT disruptions hit overseas systems.",
+    "th": "ธปท. สั่งธนาคารพาณิชย์ยกระดับความปลอดภัยและรายงานข้อมูลทุกวัน หลังพบระบบการเงินต่างประเทศเกิดเหตุขัดข้อง"
+  },
+  "source": {
+    "name": {
+      "en": "RYT9",
+      "th": "RYT9"
+    },
+    "url": "https://www.ryt9.com/s/iq/12855314",
+    "headline": "ผู้ว่าฯ ธปท. ถกด่วน! ตั้งการ์ดสูงสู้ภัยไซเบอร์ สั่งแบงก์รายงานข้อมูลทุกวัน ยันระบบการเงินไทยยังแกร่ง"
+  },
+  "attention": {
+    "score": 8,
+    "reason": "Top trending search on Google with coverage across multiple major news outlets."
+  }
+}

@@ -1,0 +1,28 @@
+{
+  "id": "2026-11-09-1655-2",
+  "date": "2026-11-09",
+  "time": "16:55",
+  "channel": "changelog",
+  "tag": "event",
+  "pillar": "weather",
+  "title": {
+    "en": "Cool season patch live: Thai Met Dept announces winter arrival",
+    "th": "แพตช์ฤดูหนาวเปิดแล้ว กรมอุตุฯ ประกาศไทยเข้าสู่หน้าหนาว"
+  },
+  "body": {
+    "en": "Thailand has officially entered the cool season. Temperatures in upper regions and Bangkok are expected to drop by 1 to 3 degrees Celsius.",
+    "th": "ประเทศไทยเข้าสู่ฤดูหนาวอย่างเป็นทางการ อุณหภูมิภาคเหนือและกรุงเทพฯ ลดลง 1-3 องศาเซลเซียส"
+  },
+  "source": {
+    "name": {
+      "en": "Matichon",
+      "th": "มติชน"
+    },
+    "url": "https://www.matichon.co.th/region/news_5967534",
+    "headline": "ลำปางเริ่มหนาว หมอกหนาปกคลุมหลายพื้นที่ ขณะที่กรมอุตุฯประกาศ เข้าสู่ฤดูหนาววันแรกของไทย"
+  },
+  "attention": {
+    "score": 8,
+    "reason": "Official nationwide season change announced by the Thai Meteorological Department."
+  }
+}
