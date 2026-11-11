@@ -1,0 +1,28 @@
+{
+  "id": "2026-11-11-0858-1",
+  "date": "2026-11-11",
+  "time": "08:58",
+  "channel": "changelog",
+  "tag": "buff",
+  "pillar": "rules",
+  "title": {
+    "en": "Fuel prices buffed: petrol -0.50 baht, diesel -1 baht per liter",
+    "th": "บัฟราคาน้ำมัน เบนซินลด 50 สตางค์ ดีเซลลด 1 บาทต่อลิตร"
+  },
+  "body": {
+    "en": "Fuel prices drop nationwide on 11 November. Petrol is reduced by 0.50 baht per liter, while diesel drops by 1 baht per liter.",
+    "th": "ปรับลดราคาน้ำมันทั่วประเทศมีผล 11 พ.ย. 2569 เบนซินลดลง 0.50 บาทต่อลิตร และดีเซลลดลง 1.00 บาทต่อลิตร"
+  },
+  "source": {
+    "name": {
+      "en": "LINE TODAY",
+      "th": "LINE TODAY"
+    },
+    "url": "https://today.line.me/th/v3/article/3N1Xeey",
+    "headline": "น้ำมันโลกขาลง กบน.หั่นเบนซิน 50 สต. ดีเซล 1 บาท มีผลเช้านี้!!! | The Better"
+  },
+  "attention": {
+    "score": 8,
+    "reason": "Nationwide fuel price cut with over 2,000 trending searches and multi-outlet coverage."
+  }
+}
