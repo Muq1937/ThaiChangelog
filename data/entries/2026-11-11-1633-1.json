@@ -1,0 +1,28 @@
+{
+  "id": "2026-11-11-1633-1",
+  "date": "2026-11-11",
+  "time": "16:33",
+  "channel": "changelog",
+  "tag": "nerf",
+  "pillar": "rules",
+  "title": {
+    "en": "Online import duty nerf: Up to 30% tariff set for foreign orders",
+    "th": "เนิร์ฟสายช้อปต่างประเทศ เคาะภาษีสินค้าออนไลน์สูงสุด 30%"
+  },
+  "body": {
+    "en": "The Cabinet has approved new import duties of up to 30% on goods ordered online from abroad via post or express courier.",
+    "th": "ครม. เห็นชอบปรับภาษีนำเข้าสินค้าสั่งซื้อออนไลน์จากต่างประเทศผ่านไปรษณีย์และขนส่งเอกชน โดยกำหนดเพดานสูงสุดที่ 30%"
+  },
+  "source": {
+    "name": {
+      "en": "Bangkok Post",
+      "th": "Bangkok Post"
+    },
+    "url": "https://www.bangkokpost.com/business/general/3352251/new-duties-approved-on-goods-imported-via-ecommerce",
+    "headline": "New duties approved on goods imported via e-commerce"
+  },
+  "attention": {
+    "score": 8,
+    "reason": "Covered by multiple major outlets including Bangkok Post, Nation Thailand, and Thaiger."
+  }
+}
