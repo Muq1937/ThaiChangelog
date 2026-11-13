@@ -1,0 +1,28 @@
+{
+  "id": "2026-11-14-0051-1",
+  "date": "2026-11-14",
+  "time": "00:51",
+  "channel": "changelog",
+  "tag": "buff",
+  "pillar": "rules",
+  "title": {
+    "en": "SRT Red Line 40-baht flat fare buff extended to end of 2027",
+    "th": "ขยายบัฟตั๋วเหมาจ่ายรถไฟฟ้าสายสีแดง 40 บาท ถึงสิ้นปี 2570"
+  },
+  "body": {
+    "en": "The State Railway of Thailand board has approved extending the 40-baht daily flat fare cap on the Red Line suburban railway through 31 December 2027.",
+    "th": "บอร์ด รฟท. มีมติขยายมาตรการตั๋วเหมาจ่ายรถไฟฟ้าสายสีแดง 40 บาทต่อวันออกไปจนถึง 31 ธันวาคม 2570 เพื่อช่วยลดค่าเดินทาง"
+  },
+  "source": {
+    "name": {
+      "en": "Khaosod",
+      "th": "ข่าวสด"
+    },
+    "url": "https://www.khaosod.co.th/economics/news_10471411",
+    "headline": "ไฟเขียว ขยายตั๋วเหมาจ่ายสายสีแดง 40 บาท ถึง 31 ธ.ค. 2570"
+  },
+  "attention": {
+    "score": 8,
+    "reason": "Official extension of Bangkok Red Line daily flat fare cap through 2027 affecting commuters."
+  }
+}
