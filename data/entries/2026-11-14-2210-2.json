@@ -1,0 +1,28 @@
+{
+  "id": "2026-11-14-2210-2",
+  "date": "2026-11-14",
+  "time": "22:10",
+  "channel": "changelog",
+  "tag": "event",
+  "pillar": "festivals",
+  "title": {
+    "en": "Vijit Chao Phraya 2026 event live: Light shows along Bangkok river",
+    "th": "เปิดอีเวนต์ วิจิตรเจ้าพระยา 2569 จัดเต็มแสงสีริมแม่น้ำ"
+  },
+  "body": {
+    "en": "The annual festival runs from 13 November to 13 December 2026, featuring light shows, fireworks, and drone displays along the Chao Phraya River.",
+    "th": "เทศกาลประจำปีเริ่มตั้งแต่ 13 พ.ย. ถึง 13 ธ.ค. 2569 ขนการแสดงแสงสี พลุ และโดรนมาจัดแสดงตลอดริมฝั่งแม่น้ำเจ้าพระยา"
+  },
+  "source": {
+    "name": {
+      "en": "LINE TODAY",
+      "th": "LINE TODAY"
+    },
+    "url": "https://today.line.me/th/v3/article/MLBlkBj?referral=viralnewshub",
+    "headline": "งานวิจิตรเจ้าพระยา 2569 ระหว่างวันที่ 13 พ.ย.-13 ธ.ค. 69"
+  },
+  "attention": {
+    "score": 8,
+    "reason": "Matches trending search 'วิจิตรเจ้าพระยา 2569' and covered by multiple national news outlets."
+  }
+}

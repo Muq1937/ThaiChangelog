@@ -1,0 +1,28 @@
+{
+  "id": "2026-11-14-2210-1",
+  "date": "2026-11-14",
+  "time": "22:10",
+  "channel": "changelog",
+  "tag": "event",
+  "pillar": "festivals",
+  "title": {
+    "en": "Eurovision Asia event launched: Bangkok selected as debut host",
+    "th": "เปิดตัว Eurovision Asia เลือกกรุงเทพฯ จัดงานครั้งแรก"
+  },
+  "body": {
+    "en": "The inaugural Eurovision Asia Song Contest is coming to Bangkok, bringing music acts from across the region to compete in the capital.",
+    "th": "การแข่งขันเพลง Eurovision Asia ครั้งแรกเตรียมจัดขึ้นที่กรุงเทพฯ ดึงศิลปินจากทั่วภูมิภาคเข้ามาร่วมประชันในเมืองหลวง"
+  },
+  "source": {
+    "name": {
+      "en": "BBC",
+      "th": "BBC"
+    },
+    "url": "https://www.bbc.com/news/live/cmwy04xnzzgzt",
+    "headline": "First Eurovision Asia about to begin as world's biggest song contest heads to Bangkok"
+  },
+  "attention": {
+    "score": 8,
+    "reason": "Matches trending search 'eurovision asia' and covered by multiple major international outlets."
+  }
+}
