@@ -1,0 +1,28 @@
+{
+  "id": "2026-11-20-1028-1",
+  "date": "2026-11-20",
+  "time": "10:28",
+  "channel": "changelog",
+  "tag": "buff",
+  "pillar": "rules",
+  "title": {
+    "en": "Chiang Mai EV tram launched: Bus route 5 returns after 20 years",
+    "th": "เชียงใหม่เปิดตัวแทรมไฟฟ้า ฟื้นรถเมล์สาย 5 ในรอบ 20 ปี"
+  },
+  "body": {
+    "en": "The electric tourist tram covers 15 stops along a 15.8 km route in Chiang Mai. Fares start at 20 baht.",
+    "th": "รถแทรมไฟฟ้าวิ่งให้บริการ 15 จุดหมาย รวมระยะทาง 15.8 กิโลเมตรในเชียงใหม่ ค่าโดยสารเริ่มต้น 20 บาท"
+  },
+  "source": {
+    "name": {
+      "en": "Khaosod",
+      "th": "ข่าวสด"
+    },
+    "url": "https://www.khaosod.co.th/economics/news_10478411",
+    "headline": "AWC ฟื้นรถเมล์สาย 5 เชียงใหม่ในรอบ 20 ปี เปิด “แทรมล้านนา EV” เชื่อม 15 จุดหมาย ดันเมืองท่องเที่ยวยั่งยืน"
+  },
+  "attention": {
+    "score": 8,
+    "reason": "Covered by multiple outlets as Chiang Mai's first electric tourist tram launch."
+  }
+}
