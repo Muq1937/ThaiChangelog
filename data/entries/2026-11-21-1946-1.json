@@ -1,0 +1,28 @@
+{
+  "id": "2026-11-21-1946-1",
+  "date": "2026-11-21",
+  "time": "19:46",
+  "channel": "changelog",
+  "tag": "nerf",
+  "pillar": "rules",
+  "title": {
+    "en": "Prachim Ratthaya Expressway toll nerfed: Up to 185 baht",
+    "th": "ทางด่วนประจิมรัถยาปรับขึ้นค่าผ่านทางสูงสุด 185 บาท 15 ธ.ค."
+  },
+  "body": {
+    "en": "Toll rates on the Si Rat-Outer Ring Road expressway are set to rise up to 185 baht from 15 December 2026. Authorities are seeking solutions to soften the price jump.",
+    "th": "ค่าผ่านทางพิเศษสายศรีรัช-วงแหวนรอบนอกจะปรับขึ้นสูงสุดเป็น 185 บาท เริ่ม 15 ธ.ค. 2569 โดยหน่วยงานที่เกี่ยวข้องกำลังหารือมาตรการบรรเทาผลกระทบ"
+  },
+  "source": {
+    "name": {
+      "en": "Khaosod",
+      "th": "ข่าวสด"
+    },
+    "url": "https://www.khaosod.co.th/economics/news_10480028",
+    "headline": "พิพัฒน์ สั่งลดภาระประชาชน หลังทางด่วนประจิมรัถยา ปรับขึ้นสูงสุด 185 บาท มีผล 15 ธ.ค.69"
+  },
+  "attention": {
+    "score": 8,
+    "reason": "Major toll fare adjustment announced for Bangkok's Prachim Ratthaya expressway affecting daily commuters."
+  }
+}
