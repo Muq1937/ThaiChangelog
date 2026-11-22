@@ -1,0 +1,28 @@
+{
+  "id": "2026-11-22-1940-1",
+  "date": "2026-11-22",
+  "time": "19:40",
+  "channel": "changelog",
+  "tag": "nerf",
+  "pillar": "festivals",
+  "title": {
+    "en": "Bread krathongs nerfed for Loy Krathong in Bangkok parks",
+    "th": "งดลอยกระทงขนมปังในสวนสาธารณะ กทม. สั่งเนิร์ฟกลัวน้ำเน่า"
+  },
+  "body": {
+    "en": "The Bangkok Metropolitan Administration asks players to refrain from floating bread and fish-food krathongs in public park ponds this Loy Krathong. The item causes severe water quality decay when left to decompose.",
+    "th": "กทม. ขอความร่วมมือผู้เล่นงดลอยกระทงขนมปังและอาหารปลาในสระน้ำของสวนสาธารณะช่วงเทศกาลลอยกระทง หลังพบว่าไอเทมนี้ย่อยสลายแล้วส่งผลให้คุณภาพน้ำเน่าเสีย"
+  },
+  "source": {
+    "name": {
+      "en": "thairath.co.th",
+      "th": "thairath.co.th"
+    },
+    "url": "https://www.thairath.co.th/news/local/bangkok/2973843",
+    "headline": "กทม. ขอความร่วมมือประชาชน งดลอย \"กระทงขนมปัง\" ในสระน้ำสวนสาธารณะ"
+  },
+  "attention": {
+    "score": 8,
+    "reason": "Matches trending search 'กระทง' and covered by multiple news outlets."
+  }
+}
