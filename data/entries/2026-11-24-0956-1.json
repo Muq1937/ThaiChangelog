@@ -1,0 +1,28 @@
+{
+  "id": "2026-11-24-0956-1",
+  "date": "2026-11-24",
+  "time": "09:56",
+  "channel": "changelog",
+  "tag": "buff",
+  "pillar": "rules",
+  "title": {
+    "en": "Credit card minimum payment rate kept at 8% until end of 2028",
+    "th": "ขยายเวลาขั้นต่ำบัตรเครดิต 8% อีก 2 ปี ถึงสิ้นปี 2571"
+  },
+  "body": {
+    "en": "The Bank of Thailand has extended the 8% minimum credit card payment rate for two more years until the end of 2028, delaying the planned increase to 10%.",
+    "th": "ธปท. ขยายมาตรการชำระขั้นต่ำบัตรเครดิตที่ 8% ออกไปอีก 2 ปี จนถึงสิ้นปี 2571 จากเดิมที่มีกำหนดจะปรับเพิ่มเป็น 10% เพื่อช่วยเพิ่มสภาพคล่องให้ผู้ถือบัตร"
+  },
+  "source": {
+    "name": {
+      "en": "Khaosod",
+      "th": "ข่าวสด"
+    },
+    "url": "https://www.khaosod.co.th/economics/news_10481701",
+    "headline": "ธปท.ต่อเวลาจ่ายขั้นต่ำบัตรเครดิต 8% ถึงสิ้นปี 2571 ประคองลูกหนี้ฟื้นไม่เต็มที่"
+  },
+  "attention": {
+    "score": 8,
+    "reason": "Nationwide financial rule change affecting credit card holders across the country."
+  }
+}
