@@ -1,0 +1,28 @@
+{
+  "id": "2026-11-28-0231-2",
+  "date": "2026-11-28",
+  "time": "02:31",
+  "channel": "ugc",
+  "tag": "event",
+  "pillar": "festivals",
+  "title": {
+    "en": "Yi Peng lantern cleanup event offers 3-5 baht per lantern bounty",
+    "th": "ชาวบ้านแห่เก็บซากโคมยี่เป็ง ผู้จัดเปิดรับซื้อลูกละ 3-5 บาท"
+  },
+  "body": {
+    "en": "Organisers of Chiang Mai's Yi Peng festival are buying back fallen sky lanterns for 3 to 5 baht each, sending local residents hunting across fields.",
+    "th": "ผู้จัดงานยี่เป็งในเชียงใหม่รับซื้อซากโคมลอยลูกละ 3 ถึง 5 บาท ส่งผลให้ชาวบ้านแห่ตามเก็บโคมออกจากพื้นที่กันอย่างคึกคัก"
+  },
+  "source": {
+    "name": {
+      "en": "Matichon",
+      "th": "มติชน"
+    },
+    "url": "https://www.matichon.co.th/region/news_5993238",
+    "headline": "ผู้จัดงานปล่อยโคมลอยยี่เป็ง โต้ดราม่า รับจบซื้อซากโคมลอยที่ตกในพื้นที่ของทุกเจ้า ลูกละ 3 บาท"
+  },
+  "attention": {
+    "score": 8,
+    "reason": "Post-festival lantern bounty story covered by multiple major news outlets."
+  }
+}
